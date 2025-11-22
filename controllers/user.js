@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 
 const Signup = async (req, res) => {
-    const { username, email, password, location} = req.body;
+    const { username, email, password, location, isAdmin} = req.body;
     let hashPassword;
     try {
         hashPassword = await bcrypt.hash(password, 10);
@@ -16,6 +16,7 @@ const Signup = async (req, res) => {
         email,
         password: hashPassword,
         location,
+        isAdmin
     }).then((user) => {
         const userPayload = user.toObject();
         delete userPayload.password;
@@ -37,7 +38,6 @@ const Signup = async (req, res) => {
 
 const login = async (req, res) => {
     const { email, password } = req.body;
-    console.log(email, password);
 
     if (!email || !password) { // Use a more concise check
         return res.render("login", { err: "All fields are required!" });
@@ -54,7 +54,7 @@ const login = async (req, res) => {
             return res.render("login", { err: "Invalid Email or Password!" });
         }
         const token = jwt.sign(
-            { id: user._id, email: user.email, name: user.username, isAdmin: user.isAdmin },
+            { id: user._id, email: user.email, username: user.username, isAdmin: user.isAdmin },
             process.env.SECRET_KEY,
             { expiresIn: '1h' }
         );

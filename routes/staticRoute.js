@@ -9,5 +9,6 @@ router.get("/login", (req, res) => res.render("login"));
 router.get("/sign-up", (req, res) => res.render("signup"));
 router.get("/cart", authenticateToken, (req, res) => res.render("cart", {user: req.user}));
 router.get("/edit", (req,res) => res.render("editProduct"));
+router.get("/addProduct", (req,res) => res.render("addProduct"));
 
 module.exports = router;

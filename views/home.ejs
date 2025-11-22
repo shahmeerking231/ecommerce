@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home - <%= user.name %></title>
+    <title>Home - <%= user.username %></title>
     <style></style>
     <link
       href="https://cdn.jsdelivr.net/npm/daisyui@5"
@@ -15,7 +15,7 @@
   <body class="bg-base-200 p-6">
     <header class="flex justify-between items-center border-b-2 p-2 mb-8">
       <h1 class="text-3xl font-bold mb-6">
-        Welcome, <%= user.name.toUpperCase() %>!
+        Welcome, <%= user.username %>!
       </h1>
       <a class="font-bold text-[3vh] pb-4" href="/cart">🛒</a>
     </header>
@@ -29,7 +29,7 @@
         <div class="card bg-base-100 shadow-sm hover:shadow-md transition">
           <figure>
             <img
-              src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
+              src="<%= JSON.stringify(product.imageURL) %>"
               alt="<%= product.name %>"
               class="h-64 object-cover w-full"
             />

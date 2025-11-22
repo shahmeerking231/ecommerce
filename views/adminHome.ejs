@@ -14,8 +14,12 @@
   <body class="bg-base-200 p-6">
     <header class="flex justify-between items-center border-b-2 p-2 mb-8">
       <h1 class="text-3xl font-bold mb-6">
-        Welcome, <%= user.name.toUpperCase() %>!
+        Welcome, <%= user.username %>!
       </h1>
+      <button
+                class="btn btn-outline btn-primary"
+                onclick="location.href='addProduct'"
+              >Add Product</button>
     </header>
     <main>
       <div>

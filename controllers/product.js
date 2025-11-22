@@ -13,7 +13,8 @@ const getProduct = async (req, res) => {
 }
 
 const createProduct = async (req, res) => {
-    const { name, description, price, imageURL, quantity } = req.body;
+    const { name, description, price, quantity } = req.body;
+    const imageURL = req.img;
     try {
         let product = await Product.create({
             name,
