@@ -86,7 +86,6 @@ const updateProductById = async (req, res) => {
 
 const renderHome = async (req, res) => {
     const user = req.user;
-    console.log(user);
     let products = await Product.find();
     if (req.user.isAdmin) {
         if (!products) return res.render("adminHome", { error: "Products not found", user: user });
