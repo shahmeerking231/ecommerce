@@ -9,8 +9,9 @@ var storage = multer.diskStorage({
         cb(null, oneStepBack + '/public/images');
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
-        req.img = Date.now() + '-' + file.originalname;
+        const date = Date.now();
+        cb(null, date + '-' + file.originalname);
+        req.img = date + '-' + file.originalname;
     }
 })
 

@@ -1,3 +1,5 @@
+const fs = require("fs");
+const path = require("path");
 const Product = require("../models/product");
 
 const getProduct = async (req, res) => {
@@ -54,6 +56,8 @@ const deleteProductById = async (req, res) => {
     try {
         let product = await Product.findByIdAndDelete(id);
         if (product) {
+            let oneStepBack = path.join(__dirname, '../');
+            await fs.unlinkSync(path.resolve(oneStepBack + 'public/images/' + product.imageURL));
             res.status(200).json({ success: true, message: "Product Deleted Successfully!" });
         } else {
             res.status(404).json({ success: false, message: "Product Not Found!" });
