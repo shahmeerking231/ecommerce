@@ -1,0 +1,74 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <% locals.products.forEach(product => { %>
+  <div class="card bg-base-100 shadow-sm hover:shadow-md transition">
+    <figure>
+      <img
+        src="<%= product.imageURL %>"
+        alt="<%= product.name %>"
+        class="h-64 object-cover w-full"
+      />
+    </figure>
+    <div class="card-body">
+      <h2 class="card-title"><%= product.name %></h2>
+      <p><%= product.description %></p>
+      <div class="w-full flex justify-between">
+        <% if (!locals.user.isAdmin) { %>
+        <div class="quantity flex items-center justify-between gap-2 my-2 w-24">
+          <div dir="ltr">
+            <button
+              class="w-2 h-8 rounded-s-lg text-center font-bold btn btn-outline btn-accent"
+              onclick="decreaseQuantity('<%= product._id %>')"
+            >
+              -
+            </button>
+          </div>
+          <p class="quantity-text w-2 text-center" id="<%= product._id %>">1</p>
+          <div dir="rtl">
+            <button
+              class="w-2 h-8 rounded-s-lg text-center font-bold btn btn-outline btn-accent"
+              onclick="increaseQuantity('<%= product._id %>')"
+            >
+              +
+            </button>
+          </div>
+        </div>
+        <% } else { %>
+        <div
+          class="quantity flex items-center justify-between gap-2 my-2 w-24"
+        ></div>
+        <% } %>
+        <span class="text-lg font-semibold">$<%= product.price %></span>
+      </div>
+      <div class="card-actions justify-end">
+        <% if (locals.user.isAdmin) { %>
+        <button
+          class="btn btn-outline btn-primary"
+          onclick="editProduct('<%= JSON.stringify(product) %>')"
+        >
+          Edit
+        </button>
+        <button
+          class="btn btn-outline btn-error"
+          onclick="deleteProduct('<%= product._id %>')"
+        >
+          Delete
+        </button>
+        <% } else { %>
+            <button
+              class="btn btn-outline btn-primary"
+              onclick="addToCart(<%= JSON.stringify(product) %>)"
+            >
+              Add
+            </button>
+            <button
+              class="btn btn-outline btn-error"
+              onclick="removeFromCart(<%= JSON.stringify(product._id) %>)"
+            >
+              Remove
+            </button>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  <% }) %>
+</div>

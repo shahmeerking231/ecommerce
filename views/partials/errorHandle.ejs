@@ -1,0 +1,17 @@
+<div class="toast toast-top toast-end">
+  <% if (typeof err !== 'undefined' && err) { %>
+  <div class="alert alert-error" id="errorToast">
+    <div>
+      <span><%= err %></span>
+    </div>
+  </div>
+  <% } %>
+</div>
+<script>
+  const errorToast = document.getElementById("errorToast");
+  if (errorToast) {
+    setTimeout(() => {
+      errorToast.style.display = "none";
+    }, 3000);
+  }
+</script>

@@ -1,0 +1,29 @@
+<script>
+  function logout() {
+    fetch("/logout", {
+      method: "POST",
+    })
+      .then((response) => {
+        response.json();
+        if (response.redirected) {
+          window.location.href = response.url;
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        toast(error.message, "error");
+      });
+  }
+  const toast = (msg, type) => {
+    const toastDiv = document.createElement("div");
+    toastDiv.classList.add("toast", "toast-bottom", "toast-end");
+    const toastInnerDiv = document.createElement("div");
+    toastInnerDiv.className = `alert alert-${type}`;
+    toastInnerDiv.innerHTML = `<div><span>${msg}</span></div>`;
+    toastDiv.appendChild(toastInnerDiv);
+    document.body.appendChild(toastDiv);
+    setTimeout(() => {
+      document.body.removeChild(toastDiv);
+    }, 3000);
+  };
+</script>

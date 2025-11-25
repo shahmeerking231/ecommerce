@@ -4,99 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home - <%= user.username %></title>
-    <style></style>
-    <link
-      href="https://cdn.jsdelivr.net/npm/daisyui@5"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <%- include('./partials/daisyui.ejs') %>
   </head>
   <body class="bg-base-200">
-    <header class="p-6 flex justify-between items-center mb-8 bg-blue-500">
-      <h1 class="text-3xl font-bold text-white">Welcome, <%= user.username %>!</h1>
-      <div class="flex justify-center items-center gap-4">
-        <a class="font-bold text-[3vh]" href="/cart">🛒</a>
-        <button class="btn btn-error btn-soft" onclick="logout()">
-        Logout
-      </button>
-      </div>
-    </header>
+    <%- include('./partials/navbar.ejs') %>
     <main class="p-6 min-h-[70vh]">
       <div>
         <h2 class="text-2xl font-semibold mb-6">Products</h2>
       </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <% products.forEach(product => { %>
-        <div class="card bg-base-100 shadow-sm hover:shadow-md transition">
-          <figure>
-            <img
-              src="<%= JSON.stringify(product.imageURL) %>"
-              alt="<%= product.name %>"
-              class="h-64 object-cover w-full"
-            />
-          </figure>
-          <div class="card-body">
-            <h2 class="card-title"><%= product.name %></h2>
-            <p><%= product.description %></p>
-            <div class="w-full flex justify-between">
-              <div
-                class="quantity flex items-center justify-between gap-2 my-2 w-24"
-              >
-                <div dir="ltr">
-                  <button
-                    class="w-2 h-8 rounded-s-lg text-center font-bold btn btn-outline btn-accent"
-                    onclick="decreaseQuantity('<%= product._id %>')"
-                  >
-                    -
-                  </button>
-                </div>
-                <p
-                  class="quantity-text w-2 text-center"
-                  id="<%= product._id %>"
-                >
-                  1
-                </p>
-                <div dir="rtl">
-                  <button
-                    class="w-2 h-8 rounded-s-lg text-center font-bold btn btn-outline btn-accent"
-                    onclick="increaseQuantity('<%= product._id %>')"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-              <span class="text-lg font-semibold">$<%= product.price %></span>
-            </div>
-            <div class="card-actions justify-end">
-              <button
-                class="btn btn-outline btn-primary"
-                onclick="addToCart(<%= JSON.stringify(product) %>)"
-              >
-                Add
-              </button>
-              <button
-                class="btn btn-outline btn-error"
-                onclick="removeFromCart(<%= JSON.stringify(product._id) %>)"
-              >
-                Remove
-              </button>
-            </div>
-          </div>
-        </div>
-        <% }) %>
-      </div>
-      <div class="toast toast-top toast-end">
-        <% if (typeof err !== 'undefined' && err) { %> //settimeout to remove
-        the alert after 3 seconds
-        <div class="alert alert-error" id="errorToast">
-          <div>
-            <span><%= err %></span>
-          </div>
-        </div>
-        <% } %>
-      </div>
+      <%- include('./partials/productDisplay.ejs') %>
     </main>
     <footer class="mt-8">
       <hr class="my-6" />
@@ -104,34 +20,9 @@
         &copy; <%= new Date().getFullYear() %> ShahmeerJS . All rights reserved.
       </p>
     </footer>
+    <%- include('./partials/script.ejs') %>
     <script>
       let quantity = 1;
-
-      const toast = (msg, type) => {
-        const toastDiv = document.createElement("div");
-        toastDiv.classList.add("toast", "toast-bottom", "toast-end");
-        const toastInnerDiv = document.createElement("div");
-        toastInnerDiv.className = `alert alert-${type}`;
-        toastInnerDiv.innerHTML = `<div><span>${msg}</span></div>`;
-        toastDiv.appendChild(toastInnerDiv);
-        document.body.appendChild(toastDiv);
-        setTimeout(() => {
-          document.body.removeChild(toastDiv);
-        }, 3000);
-      };
-
-      function capitalizeFirstLetter(str) {
-        if (typeof str !== "string" || str.length === 0) {
-          return str; // Handle empty strings or non-string inputs
-        }
-        return str.charAt(0).toUpperCase() + str.slice(1);
-      }
-      const errorToast = document.getElementById("errorToast");
-      if (errorToast) {
-        setTimeout(() => {
-          errorToast.style.display = "none";
-        }, 3000);
-      }
       function addToCart(product) {
         quantity = parseInt(
           document.getElementById(`${product._id}`).textContent
@@ -142,16 +33,10 @@
         );
         if (existingItem) {
           existingItem.quantity += quantity;
-          toast(
-            `${capitalizeFirstLetter(product.name)} quantity updated in cart!`,
-            "success"
-          );
+          toast(`${product.name} quantity updated in cart!`, "success");
         } else {
           cart.push({ product: product, quantity: quantity });
-          toast(
-            `${capitalizeFirstLetter(product.name)} added to cart!`,
-            "success"
-          );
+          toast(`${product.name} added to cart!`, "success");
         }
         localStorage.setItem("cart", JSON.stringify(cart));
       }
@@ -180,21 +65,7 @@
           quantity_text.textContent = quantity;
         }
       }
-      function logout() {
-        fetch("/logout", {
-          method: "POST",
-        })
-          .then((response) => {
-            response.json();
-            if (response.redirected) {
-              window.location.href = response.url;
-            }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            toast(error.message, "error");
-          });
-      }
     </script>
+        <%-  include('./partials/errorHandle.ejs') %>
   </body>
 </html>
