@@ -83,7 +83,7 @@
       const imageURL = document.getElementById("imageURL");
       const quantity = document.getElementById("quantity");
       const edit = document.getElementById("edit");
-      let editproduct = {};
+      let productId;
 
       function deleteProduct(productId) {
         console.log(productId);
@@ -108,13 +108,13 @@
         }
       }
       function editProduct(product) {
-        editproduct = JSON.parse(product);
-        console.log(editproduct);
-        name.value = editproduct.name;
-        description.value = editproduct.description;
-        price.value = editproduct.price;
-        imageURL.value = editproduct.imageURL;
-        quantity.value = editproduct.quantity;
+        product = JSON.parse(product);
+        productId = product._id;
+        name.value = product.name;
+        description.value = product.description;
+        price.value = product.price;
+        imageURL.value = product.imageURL;
+        quantity.value = product.quantity;
         edit.classList.add("edit");
       }
       function closeEdit() {
@@ -126,37 +126,48 @@
         }
       };
       const editSave = () => {
-        console.log(editproduct);
+        let product = {};
+        product.name = name.value.trim();
+        product.description = description.value.trim();
+        product.price = parseInt(price.value);
+        product.imageURL = imageURL.value.trim();
+        product.quantity = parseInt(quantity.value);
         if (
-          editproduct.name ||
-          editproduct.description ||
-          editproduct.price ||
-          editproduct.imageURL ||
-          editproduct.quantity
+          (product.name != "") &
+          (product.name != undefined) &
+          (product.description != "") &
+          (product.description != undefined) &
+          (product.price != null) &
+          (product.price != undefined) &
+          (product.imageURL != "") &
+          (product.imageURL != undefined) &
+          (product.quantity != null) &
+          (product.quantity != undefined)
         ) {
-          fetch(`/products/${editproduct._id}`, {
+          fetch(`/products/${productId}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(editproduct),
+            body: JSON.stringify(product),
           })
             .then((response) => response.json())
             .then((data) => {
-              console.log("Success:", data);
+              toast("Product updated successfully", "success");
             })
             .catch((error) => {
-              console.error("Error:", error);
+              toast(error.message, "error");
             });
         } else {
-          alert("Please fill in at least one field to update the product.");
+          toast("All fields are required!", "error");
           return;
         }
       };
       document.getElementById("editform").addEventListener("click", (e) => {
         e.preventDefault();
         editSave();
-      })
+        closeEdit();
+      });
     </script>
     <%- include('./partials/errorHandle.ejs') %>
   </body>
