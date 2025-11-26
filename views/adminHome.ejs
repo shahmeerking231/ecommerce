@@ -4,6 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hello Admin <%= user.username %></title>
+    <style>
+      .none-class {
+        display: none;
+      }
+      .edit {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: transparent;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+    </style>
     <%- include('./partials/daisyui.ejs') %>
   </head>
   <body class="bg-base-200">
@@ -20,8 +40,51 @@
         &copy; <%= new Date().getFullYear() %> ShahmeerJS . All rights reserved.
       </p>
     </footer>
+    <div class="none-class" id="edit">
+      <form
+        class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-6"
+      >
+        <div class="heading">
+          <h2>Edit Product</h2>
+        </div>
+        <label class="label" for="name">Name</label>
+        <input class="input w-full" type="text" id="name" name="name" />
+
+        <label class="label" for="description">Description</label>
+        <input
+          class="input w-full"
+          type="text"
+          id="description"
+          name="description"
+        />
+
+        <label class="label" for="price">Price</label>
+        <input class="input w-full" type="number" id="price" name="price" />
+
+        <label class="label" for="imageURL">Image Url</label>
+        <input class="input w-full" type="text" id="imageURL" name="imageURL" />
+
+        <label class="label" for="quantity">Quantity</label>
+        <input
+          class="input w-full"
+          type="number"
+          id="quantity"
+          name="quantity"
+        />
+
+        <button class="btn btn-neutral" id="editform">Save Edits</button>
+      </form>
+    </div>
     <%- include('./partials/script.ejs') %>
     <script>
+      const name = document.getElementById("name");
+      const description = document.getElementById("description");
+      const price = document.getElementById("price");
+      const imageURL = document.getElementById("imageURL");
+      const quantity = document.getElementById("quantity");
+      const edit = document.getElementById("edit");
+      let editproduct = {};
+
       function deleteProduct(productId) {
         console.log(productId);
         if (confirm("Are you sure you want to delete this product?")) {
@@ -45,12 +108,55 @@
         }
       }
       function editProduct(product) {
-        if (localStorage.getItem("product")) {
-          localStorage.removeItem("product");
-        }
-        localStorage.setItem("product", product);
-        location.href = "/edit";
+        editproduct = JSON.parse(product);
+        console.log(editproduct);
+        name.value = editproduct.name;
+        description.value = editproduct.description;
+        price.value = editproduct.price;
+        imageURL.value = editproduct.imageURL;
+        quantity.value = editproduct.quantity;
+        edit.classList.add("edit");
       }
+      function closeEdit() {
+        edit.classList.remove("edit");
+      }
+      window.onclick = function (event) {
+        if (event.target == edit) {
+          closeEdit();
+        }
+      };
+      const editSave = () => {
+        console.log(editproduct);
+        if (
+          editproduct.name ||
+          editproduct.description ||
+          editproduct.price ||
+          editproduct.imageURL ||
+          editproduct.quantity
+        ) {
+          fetch(`/products/${editproduct._id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(editproduct),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Success:", data);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        } else {
+          alert("Please fill in at least one field to update the product.");
+          return;
+        }
+      };
+      document.getElementById("editform").addEventListener("click", (e) => {
+        e.preventDefault();
+        editSave();
+      })
     </script>
     <%- include('./partials/errorHandle.ejs') %>
   </body>
