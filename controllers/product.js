@@ -56,12 +56,12 @@ const deleteProductById = async (req, res) => {
     try {
         let product = await Product.findByIdAndDelete(id);
         if (product) {
-            if (!product.imageURL === "https://shorturl.at/RnRet") {    
+            if (!product.imageURL === "https://shorturl.at/RnRet") {
                 let oneStepBack = path.join(__dirname, '../');
                 await fs.unlinkSync(path.resolve(oneStepBack + 'public/images/' + product.imageURL));
             }
-            else{
-            res.status(200).json({ success: true, message: "Product Deleted Successfully!" });
+            else {
+                res.status(200).json({ success: true, message: "Product Deleted Successfully!" });
             }
         } else {
             res.status(404).json({ success: false, message: "Product Not Found!" });
@@ -72,14 +72,13 @@ const deleteProductById = async (req, res) => {
 }
 
 const updateProductById = async (req, res) => {
-    const { name, description, price, imageURL, quantity } = req.body;
+    const { name, description, price, quantity } = req.body;
     const { id } = req.params;
     try {
         let product = await Product.findByIdAndUpdate(id, {
             name,
             description,
             price,
-            imageURL,
             quantity
         })
         if (product) {

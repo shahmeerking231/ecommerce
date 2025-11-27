@@ -62,9 +62,6 @@
         <label class="label" for="price">Price</label>
         <input class="input w-full" type="number" id="price" name="price" />
 
-        <label class="label" for="imageURL">Image Url</label>
-        <input class="input w-full" type="file" id="imageURL" name="imageURL" />
-
         <label class="label" for="quantity">Quantity</label>
         <input
           class="input w-full"
@@ -73,7 +70,7 @@
           name="quantity"
         />
 
-        <button class="btn btn-neutral" id="form-btn"></button>
+        <button class="btn btn-neutral" id="form-btn">Edit Product</button>
       </form>
     </div>
     <%- include('./partials/script.ejs') %>
@@ -81,9 +78,9 @@
       const name = document.getElementById("name");
       const description = document.getElementById("description");
       const price = document.getElementById("price");
-      const imageURL = document.getElementById("imageURL");
       const quantity = document.getElementById("quantity");
-      const edit = document.getElementById("edit");
+      const container = document.getElementById("container");
+      const heading = document.querySelector(".heading h2");
       let productId;
 
       function deleteProduct(productId) {
@@ -114,9 +111,9 @@
         name.value = product.name;
         description.value = product.description;
         price.value = product.price;
-        imageURL.value = product.imageURL;
         quantity.value = product.quantity;
-        edit.classList.add("edit");
+        heading.innerHTML = `Editing: ${product.name}`;
+        container.classList.add("form-container");
       }
       function closeContainer() {
         container.classList.remove("form-container");
@@ -126,13 +123,13 @@
           closeContainer();
         }
       };
-      const editSave = () => {
+      const editSave = async () => {
         let product = {};
         product.name = name.value.trim();
         product.description = description.value.trim();
         product.price = parseInt(price.value);
-        product.imageURL = imageURL.value.trim();
         product.quantity = parseInt(quantity.value);
+    
         if (
           (product.name != "") &
           (product.name != undefined) &
@@ -140,34 +137,42 @@
           (product.description != undefined) &
           (product.price != null) &
           (product.price != undefined) &
-          (product.imageURL != "") &
-          (product.imageURL != undefined) &
           (product.quantity != null) &
           (product.quantity != undefined)
         ) {
+
           fetch(`/products/${productId}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(editproduct),
+            body: JSON.stringify(product),
           })
             .then((response) => response.json())
             .then((data) => {
-              console.log("Success:", data);
+              toast(
+                "Product updated successfully!",
+                data.success ? "success" : "error"
+              );
+              if (data.success) {
+                setTimeout(() => {
+                  closeContainer();
+                  window.location.reload();
+                }, 500);
+              }
             })
             .catch((error) => {
-              console.error("Error:", error);
+              toast(error.message, "error");
             });
         } else {
           toast("All fields are required!", "error");
           return;
         }
       };
-      formBtn.addEventListener("click", (e) => {
+      document.getElementById("form-btn").addEventListener("click", (e) => {
         e.preventDefault();
         editSave();
-        closeEdit();
+        closeContainer();
       });
     </script>
     <%- include('./partials/errorHandle.ejs') %>
