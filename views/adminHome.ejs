@@ -83,66 +83,8 @@
       const price = document.getElementById("price");
       const imageURL = document.getElementById("imageURL");
       const quantity = document.getElementById("quantity");
-      const container = document.getElementById("container");
-      const heading = document.querySelector(".heading h2");
-      const formBtn = document.getElementById("form-btn");
+      const edit = document.getElementById("edit");
       let productId;
-
-      function openContainer(headingText, btnText = "Save") {
-        heading.innerText = headingText;
-        formBtn.innerText = btnText;
-        container.classList.add("form-container");
-      }
-
-      function getProduct() {
-        let product = {};
-        product.name = name.value.trim();
-        product.description = description.value.trim();
-        product.price = parseInt(price.value);
-        product.imageURL = imageURL.files[0];
-        product.quantity = parseInt(quantity.value);
-        console.log(product);
-        if (
-          (product.name != "") &
-          (product.name != undefined) &
-          (product.description != "") &
-          (product.description != undefined) &
-          (product.price != null) &
-          (product.price != undefined) &
-          (product.quantity != null) &
-          (product.quantity != undefined)
-        ) {
-          return product;
-        } else {
-          toast("All fields are required!", "error");
-          return;
-        }
-      }
-
-      function addProduct() {
-        let product = getProduct();
-        let fileInput = document.getElementById("imageURL");
-
-        const formData = new FormData();
-        formData.append("imageURL", fileInput.files[0]);
-
-        for (let key in product) {
-          formData.append(key, product[key]);
-        }
-
-        fetch("/products", {
-          method: "POST",
-          body: formData,
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            toast("Product added successfully", "success");
-            window.location.reload();
-          })
-          .catch((error) => {
-            toast(error.message, "error");
-          });
-      }
 
       function deleteProduct(productId) {
         console.log(productId);
@@ -172,9 +114,9 @@
         name.value = product.name;
         description.value = product.description;
         price.value = product.price;
-        imageURL.files[0] = product.imageURL;
+        imageURL.value = product.imageURL;
         quantity.value = product.quantity;
-        openContainer(`Edit Product - ${product.name}`);
+        edit.classList.add("edit");
       }
       function closeContainer() {
         container.classList.remove("form-container");
@@ -185,34 +127,47 @@
         }
       };
       const editSave = () => {
-        let product = getProduct();
-        if (product) {
+        let product = {};
+        product.name = name.value.trim();
+        product.description = description.value.trim();
+        product.price = parseInt(price.value);
+        product.imageURL = imageURL.value.trim();
+        product.quantity = parseInt(quantity.value);
+        if (
+          (product.name != "") &
+          (product.name != undefined) &
+          (product.description != "") &
+          (product.description != undefined) &
+          (product.price != null) &
+          (product.price != undefined) &
+          (product.imageURL != "") &
+          (product.imageURL != undefined) &
+          (product.quantity != null) &
+          (product.quantity != undefined)
+        ) {
           fetch(`/products/${productId}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(product),
+            body: JSON.stringify(editproduct),
           })
             .then((response) => response.json())
             .then((data) => {
-              toast("Product updated successfully", "success");
+              console.log("Success:", data);
             })
             .catch((error) => {
-              toast(error.message, "error");
+              console.error("Error:", error);
             });
         } else {
+          toast("All fields are required!", "error");
           return;
         }
       };
       formBtn.addEventListener("click", (e) => {
         e.preventDefault();
-        if (formBtn.innerText === "Save") {
-          editSave();
-        } else {
-          addProduct();
-        }
-        closeContainer();
+        editSave();
+        closeEdit();
       });
     </script>
     <%- include('./partials/errorHandle.ejs') %>

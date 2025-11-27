@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Product</title>
+    <%- include('./partials/daisyui.ejs') %> <%-
+    include('./partials/formStyle.ejs') %>
+  </head>
+  <body>
+    <main></main>
+
+    <script>
+      let product = JSON.parse(localStorage.getItem("product")) || {};
+      const main = document.querySelector("main");
+      console.log("Raw localStorage:", localStorage.getItem("product"));
+      console.log("Parsed:", JSON.parse(localStorage.getItem("product")));
+
+      if (Object.keys(product).length === 0) {
+        main.innerText = "No Product Selected to Edit";
+      } else {
+        main.innerHTML = `
+    <form class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-6">
+       <div class="heading">
+        <h2>Edit Product</h2>
+      </div>
+      <label class="label" for="name">Name</label>
+      <input class="input w-full" type="text" id="name" name="name" value="${
+        product.name ?? ""
+      }">
+      
+      <label class="label" for="description">Description</label>
+      <input class="input w-full" type="text" id="description" name="description" value="${
+        product.description ?? ""
+      }">
+      
+      <label class="label" for="price">Price</label>
+      <input class="input w-full" type="number" id="price" name="price" value="${
+        product.price ?? ""
+      }">
+      
+      <label class="label" for="imageURL">Image Url</label>
+      <input class="input w-full" type="url" id="imageURL" name="imageURL" value="${
+        product.imageURL ?? ""
+      }">
+      
+      <label class="label" for="quantity">Quantity</label>
+      <input class="input w-full" type="number" id="quantity" name="quantity" value="${
+        product.quantity ?? ""
+      }">
+      
+      <button class="btn btn-neutral" id="editSave">Save Edits</button>
+    </form>
+  `;
+      }
+      const editSave = document.getElementById("editSave");
+      editSave.addEventListener("click", (e) => {
+        e.preventDefault();
+        product.name = document.getElementById("name").value;
+        product.description = document.getElementById("description").value;
+        product.price = parseInt(document.getElementById("price").value);
+        product.imageURL = document.getElementById("imageURL").value;
+        product.quantity = parseInt(document.getElementById("quantity").value);
+        if (
+          product.name ||
+          product.description ||
+          product.price ||
+          product.imageURL ||
+          product.quantity
+        ) {
+          fetch(`/products/${product._id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(product),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Success:", data);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        } else {
+          alert("Please fill in at least one field to update the product.");
+          return;
+        }
+      });
+    </script>
+     <%-  include('./partials/errorHandle.ejs') %>
+  </body>
+</html>
