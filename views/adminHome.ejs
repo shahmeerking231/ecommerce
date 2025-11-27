@@ -8,7 +8,7 @@
       .none-class {
         display: none;
       }
-      .edit {
+      .form-container {
         width: 100%;
         height: 100%;
         position: absolute;
@@ -40,12 +40,13 @@
         &copy; <%= new Date().getFullYear() %> ShahmeerJS . All rights reserved.
       </p>
     </footer>
-    <div class="none-class" id="edit">
+    <div class="none-class" id="container">
       <form
         class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-6"
+        enctype="multipart/form-data"
       >
         <div class="heading">
-          <h2>Edit Product</h2>
+          <h2></h2>
         </div>
         <label class="label" for="name">Name</label>
         <input class="input w-full" type="text" id="name" name="name" />
@@ -62,7 +63,7 @@
         <input class="input w-full" type="number" id="price" name="price" />
 
         <label class="label" for="imageURL">Image Url</label>
-        <input class="input w-full" type="text" id="imageURL" name="imageURL" />
+        <input class="input w-full" type="file" id="imageURL" name="imageURL" />
 
         <label class="label" for="quantity">Quantity</label>
         <input
@@ -72,7 +73,7 @@
           name="quantity"
         />
 
-        <button class="btn btn-neutral" id="editform">Save Edits</button>
+        <button class="btn btn-neutral" id="form-btn"></button>
       </form>
     </div>
     <%- include('./partials/script.ejs') %>
@@ -82,8 +83,66 @@
       const price = document.getElementById("price");
       const imageURL = document.getElementById("imageURL");
       const quantity = document.getElementById("quantity");
-      const edit = document.getElementById("edit");
+      const container = document.getElementById("container");
+      const heading = document.querySelector(".heading h2");
+      const formBtn = document.getElementById("form-btn");
       let productId;
+
+      function openContainer(headingText, btnText = "Save") {
+        heading.innerText = headingText;
+        formBtn.innerText = btnText;
+        container.classList.add("form-container");
+      }
+
+      function getProduct() {
+        let product = {};
+        product.name = name.value.trim();
+        product.description = description.value.trim();
+        product.price = parseInt(price.value);
+        product.imageURL = imageURL.files[0];
+        product.quantity = parseInt(quantity.value);
+        console.log(product);
+        if (
+          (product.name != "") &
+          (product.name != undefined) &
+          (product.description != "") &
+          (product.description != undefined) &
+          (product.price != null) &
+          (product.price != undefined) &
+          (product.quantity != null) &
+          (product.quantity != undefined)
+        ) {
+          return product;
+        } else {
+          toast("All fields are required!", "error");
+          return;
+        }
+      }
+
+      function addProduct() {
+        let product = getProduct();
+        let fileInput = document.getElementById("imageURL");
+
+        const formData = new FormData();
+        formData.append("imageURL", fileInput.files[0]);
+
+        for (let key in product) {
+          formData.append(key, product[key]);
+        }
+
+        fetch("/products", {
+          method: "POST",
+          body: formData,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            toast("Product added successfully", "success");
+            window.location.reload();
+          })
+          .catch((error) => {
+            toast(error.message, "error");
+          });
+      }
 
       function deleteProduct(productId) {
         console.log(productId);
@@ -113,37 +172,21 @@
         name.value = product.name;
         description.value = product.description;
         price.value = product.price;
-        imageURL.value = product.imageURL;
+        imageURL.files[0] = product.imageURL;
         quantity.value = product.quantity;
-        edit.classList.add("edit");
+        openContainer(`Edit Product - ${product.name}`);
       }
-      function closeEdit() {
-        edit.classList.remove("edit");
+      function closeContainer() {
+        container.classList.remove("form-container");
       }
       window.onclick = function (event) {
-        if (event.target == edit) {
-          closeEdit();
+        if (event.target == container) {
+          closeContainer();
         }
       };
       const editSave = () => {
-        let product = {};
-        product.name = name.value.trim();
-        product.description = description.value.trim();
-        product.price = parseInt(price.value);
-        product.imageURL = imageURL.value.trim();
-        product.quantity = parseInt(quantity.value);
-        if (
-          (product.name != "") &
-          (product.name != undefined) &
-          (product.description != "") &
-          (product.description != undefined) &
-          (product.price != null) &
-          (product.price != undefined) &
-          (product.imageURL != "") &
-          (product.imageURL != undefined) &
-          (product.quantity != null) &
-          (product.quantity != undefined)
-        ) {
+        let product = getProduct();
+        if (product) {
           fetch(`/products/${productId}`, {
             method: "PUT",
             headers: {
@@ -159,14 +202,17 @@
               toast(error.message, "error");
             });
         } else {
-          toast("All fields are required!", "error");
           return;
         }
       };
-      document.getElementById("editform").addEventListener("click", (e) => {
+      formBtn.addEventListener("click", (e) => {
         e.preventDefault();
-        editSave();
-        closeEdit();
+        if (formBtn.innerText === "Save") {
+          editSave();
+        } else {
+          addProduct();
+        }
+        closeContainer();
       });
     </script>
     <%- include('./partials/errorHandle.ejs') %>
