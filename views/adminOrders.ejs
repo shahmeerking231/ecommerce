@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <%- include('./partials/daisyui.ejs') %>
+    <title>Orders</title>
+  </head>
+  <body>
+    <%- include('./partials/navbar.ejs') %>
+    <main class="min-h-screen flex flex-col">
+      <% orders.forEach(order => { %>
+      <div class="flex bg-base-100 shadow-sm rounded-xl overflow-hidden">
+        <img
+          class="w-[18vh] h-[18vh] object-cover rounded-l-xl"
+          src=""
+          alt=""
+        />
+        <div class="card-body p-4 flex w-full justify-between">
+          <div>
+            <h2 class="card-title"></h2>
+            <p class="text-sm text-gray-600"></p>
+            <div class="card-actions justify-between items-center mt-2">
+              <span class="text-lg font-semibold text-primary"></span>
+              <span class="text-lg font-semibold text-primary">Qty: </span>
+            </div>
+          </div>
+          <button class="btn btn-error btn-sm remove-item">❌</button>
+        </div>
+      </div>
+      <% }) %>
+    </main>
+    <%- include('./partials/footer.ejs')%> <%- include('./partials/script.ejs')
+    %>
+  </body>
+</html>

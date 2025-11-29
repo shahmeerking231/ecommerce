@@ -1,14 +1,15 @@
 const Order = require("../models/order");
 
 const getOrders = async (req, res) => {
+    const user = req.user;
     try {
         let orders = await Order.find();
         if (orders) {
-            res.status(200).json({ success: true, orders });
+            return res.status(200).render("adminOrders", { success: true, orders, user });
         }
-        res.status(401).json({ success: false, message: "Orders not found" });
-    } catch (error) {
-        res.status(500).json({ success: false, message: "Internal Server Error" });
+        else return res.status(401).render("adminOrders", { success: false, error: "No Products Found" });
+    } catch (err) {
+        return res.status(500).render("adminOrders", { success: false, error: "Internal Server Error!" });
     }
 }
 

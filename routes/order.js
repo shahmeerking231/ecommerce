@@ -4,7 +4,7 @@ const authenticateToken = require("../middlewares/authenticateToken");
 
 const router = express.Router();
 
-router.get("/", getOrders);
+router.get("/",authenticateToken, getOrders);
 router.get("/user", authenticateToken, userSpecificOrders);
 router.post("/", authenticateToken, createOrder);
 router.post("/delivered", changeDelivered);

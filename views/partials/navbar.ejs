@@ -1,18 +1,42 @@
-<header class="p-6 flex justify-between items-center mb-8 bg-blue-500">
-  <h1 class="text-3xl font-bold text-white">
-    Welcome, <%= locals.user.username %>!
-  </h1>
-  <div class="flex justify-center items-center gap-4">
-    <% if (locals.user.isAdmin) { %>
-    <button
-      class="btn btn-neutral btn-soft"
-      onclick="location.href='/addProduct'"
-    >
-      Add Product
-    </button>
-    <% } else { %>
-    <a class="font-bold text-[3vh]" href="/cart">🛒</a>
-    <% } %>
-    <button class="btn btn-error btn-soft" onclick="logout()">Logout</button>
+<header>
+  <div class="p-6 flex justify-between items-center bg-blue-500">
+    <h1 class="text-3xl font-bold text-white">
+      Welcome, <%= locals.user.username %>!
+    </h1>
+    <div class="flex justify-center items-center gap-4">
+      <% if (locals.user.isAdmin) { %>
+      <button
+        class="btn btn-neutral btn-soft"
+        onclick="location.href='/addProduct'"
+      >
+        Add Product
+      </button>
+      <% } else { %>
+      <a class="font-bold text-[3vh]" href="/cart">🛒</a>
+      <% } %>
+      <button class="btn btn-error btn-soft" onclick="logout()">Logout</button>
+    </div>
   </div>
+  <nav class="w-full h-14 flex items-center justify-center gap-6 border-b-1" >
+    <a
+      class="border-b border-transparent hover:border-b hover:border-black transition-all duration-200"
+      href="/"
+      >Home</a
+    >
+    <a
+      class="border-b border-transparent hover:border-b hover:border-black transition-all duration-200 active:border-blue-500"
+      href="/products"
+      >Products</a
+    >
+    <a
+      class="border-b border-transparent hover:border-b hover:border-black transition-all duration-200"
+      href="/orders"
+      >Orders</a
+    >
+    <a
+      class="border-b border-transparent hover:border-b hover:border-black transition-all duration-200"
+      href="/profile"
+      >Profile</a
+    >
+  </nav>
 </header>
