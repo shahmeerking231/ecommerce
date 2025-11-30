@@ -18,6 +18,10 @@ const orderSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    orderId:{
+        type: Number,
+        required: true
+    },
     deliveryDate: {
         type: Number,
         required: true

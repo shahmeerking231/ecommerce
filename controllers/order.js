@@ -1,3 +1,4 @@
+const order = require("../models/order");
 const Order = require("../models/order");
 
 const getOrders = async (req, res) => {
@@ -32,20 +33,21 @@ const userSpecificOrders = async (req, res) => {
 const createOrder = async (req, res) => {
     const { products, totalAmount } = req.body;
     let deliveryDate = 3;
-    console.log(products, totalAmount, req.user);
+    let orderId = parseInt(Math.random() * 1000000);
     try {
         const order = await Order.create({
             products,
             userId: req.user.id,
+            orderId,
             deliveryDate,
             totalAmount
         });
         if (order) {
-            res.status(200).json({ success: true });
+            return res.status(200).json({ success: true });
         }
-        res.status(401).json({ success: false, message: "Order Not Created" });
+        return res.status(401).json({ success: false, message: "Order Not Created" });
     } catch (error) {
-        res.status(500).json({ success: false, err: `Internal Server Error, Try Again! ${error}` });
+        return res.status(500).json({ success: false, err: `Internal Server Error, Try Again! ${error}` });
     }
 }
 
