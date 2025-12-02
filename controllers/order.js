@@ -8,7 +8,7 @@ const getOrders = async (req, res) => {
         if (orders) {
             return res.status(200).render("adminOrders", { success: true, orders, user });
         }
-        else return res.status(401).render("adminOrders", { success: false, error: "No Products Found" });
+        else return res.status(401).render("adminOrders", { success: false, error: "No Orders Found" });
     } catch (err) {
         return res.status(500).render("adminOrders", { success: false, error: "Internal Server Error!" });
     }

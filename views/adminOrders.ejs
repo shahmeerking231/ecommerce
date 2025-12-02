@@ -8,24 +8,38 @@
   </head>
   <body>
     <%- include('./partials/navbar.ejs') %>
-    <main class="min-h-screen flex flex-col">
+    <main class="min-h-screen flex flex-col text-black p-4 m-4">
       <% orders.forEach(order => { %>
-      <div class="flex bg-base-100 shadow-sm rounded-xl overflow-hidden">
-        <div class="card-body p-4 flex w-full justify-between">
+      <div class="flex bg-base-100 shadow-sm rounded-xl overflow-hidden justify-between items-center p-4 m-4">
           <div>
-            <h2 class="card-title"></h2>
-            <p class="text-sm text-gray-600"></p>
-            <div class="card-actions justify-between items-center mt-2">
-              <span class="text-lg font-semibold text-primary"></span>
-              <span class="text-lg font-semibold text-primary">Qty: </span>
-            </div>
+          <h2 class="card-title">Order# <%= order.orderId %></h2>
+          <p class="text-sm text-gray-600">Total Amount: <%= order.totalAmount %></p>
+          <span class="text-md font-semibold text-primary"
+            >Deleivery Date: <%= order.deliveryDate %></span
+          >
           </div>
-          <button class="btn btn-error btn-sm remove-item">❌</button>
-        </div>
+          <div class="flex gap-4 w-[70%] overflow-x-auto text-xs">
+            <% order.products.forEach(product => { %>
+              <div class="w-fit h-full border p-4 rounded cursor-pointer" onclick="viewProduct('<%= product.product %>')">
+              <span><span class="font-bold">Product#</span> <%= product.product %></span><span class="font-bold"> -</span>
+              <span class="text-gray-500"><span class="font-bold">Quantity:</span> <%= product.quantity %></span>
+              </div>
+           <% }); %>
+          </div>
+          <div>
+            <button <%=order.isDelivered ? disabled: ""  %> class="btn btn-outline btn-neutral">
+              <%= order.isDelivered ? "Delivered" : "Mark as Delivered" %>
+            </button>
+          </div>
       </div>
       <% }) %>
     </main>
     <%- include('./partials/footer.ejs')%> <%- include('./partials/script.ejs')
     %>
+    <script>
+      const viewProduct = (productId) => {
+        window.location.href = `/products/${productId}`;
+      }
+    </script>
   </body>
 </html>

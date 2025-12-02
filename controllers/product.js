@@ -37,17 +37,19 @@ const createProduct = async (req, res) => {
 
 const getProductById = async (req, res) => {
     const { id } = req.params;
+    const user = req.user;
     try {
-        let product = await Product.findOneById({
-            id
+        let product = await Product.findOne({
+            _id: id
         });
         if (product) {
-            res.status(200).json({ success: true, product });
+            return res.status(200).render("productView", { success: true, product });
         } else {
-            res.status(404).json({ success: false, message: "Product Not Found!" });
+            return res.status(401).render("productView", { success: false, message: "Product not Found!" });
         }
     } catch (error) {
-        res.status(500).json({ success: false, message: "Internal Server Error" });
+        console.error("ERROR in getProductById:", error);
+        return res.status(500).render("productView", { success: false, message: "Internal Server Error!"});
     }
 }
 
