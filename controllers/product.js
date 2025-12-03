@@ -6,11 +6,11 @@ const getProduct = async (req, res) => {
     try {
         let products = await Product.find();
         if (products) {
-            res.status(200).json({ success: true, products });
+            return res.status(200).json({ success: true, products });
         }
-        res.status(401).json({ success: false, message: "No Products Found!" });
+        return res.status(401).json({ success: false, message: "No Products Found!" });
     } catch (error) {
-        res.status(500).json({ success: false, message: "Internal Server error" });
+        return res.status(500).json({ success: false, message: "Internal Server error" });
     }
 }
 
@@ -26,12 +26,12 @@ const createProduct = async (req, res) => {
             quantity
         });
         if (product) {
-            res.status(200).json({ success: true, product });
+            return res.status(200).json({ success: true, product });
         } else {
-            res.status(401).json({ success: false, message: "Product Not Created" });
+            return res.status(401).json({ success: false, message: "Product Not Created" });
         }
     } catch (error) {
-        res.status(500).json({ success: false, err: `Internal Server Error, Try Again! ${error}` });
+        return res.status(500).json({ success: false, err: `Internal Server Error, Try Again! ${error}` });
     }
 }
 
@@ -59,17 +59,17 @@ const deleteProductById = async (req, res) => {
         let product = await Product.findByIdAndDelete(id);
         if (product) {
             if (!product.imageURL === "https://shorturl.at/RnRet") {
-                let oneStepBack = path.join(__dirname, '../');
+                let oneStepBack = path.join(__dirname, '../');return 
                 await fs.unlinkSync(path.resolve(oneStepBack + 'public/images/' + product.imageURL));
             }
             else {
-                res.status(200).json({ success: true, message: "Product Deleted Successfully!" });
+                return res.status(200).json({ success: true, message: "Product Deleted Successfully!" });
             }
         } else {
-            res.status(404).json({ success: false, message: "Product Not Found!" });
+            return res.status(404).json({ success: false, message: "Product Not Found!" });
         }
     } catch (error) {
-        res.status(500).json({ success: false, message: "Internal Server Error" });
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
 
@@ -84,12 +84,12 @@ const updateProductById = async (req, res) => {
             quantity
         })
         if (product) {
-            res.status(200).json({ success: true, product });
+            return res.status(200).json({ success: true, product });
         } else {
-            res.status(404).json({ success: false, message: "Product Not Found!" });
+            return res.status(404).json({ success: false, message: "Product Not Found!" });
         }
     } catch (error) {
-        res.status(500).json({ success: false, message: "Internal Server Error" });
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
 

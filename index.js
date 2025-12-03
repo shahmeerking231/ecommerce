@@ -21,6 +21,7 @@ app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
 var dir = path.join(__dirname, 'public/images');
 app.use(express.static(dir));
+app.use('/products', express.static(dir));
 
 //middlewares
 app.use(express.json());

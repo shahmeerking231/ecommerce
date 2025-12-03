@@ -3,10 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <%- include('./partials/daisyui.ejs') %>
   </head>
-  <body>
+  <body class="min-h-screen w-full p-6">
     <% if (success) { %>
-    <pre><%= JSON.stringify(product, null, 2) %></pre>
+    <div class="bg-base-100 shadow-sm hover:shadow-md transition p-4 rounded flex justify-between gap-6">
+     <div class="flex">
+    <figure class="w-fit">
+      <img
+        src="<%= product.imageURL %>"
+        alt="<%= product.name %>"
+        class="h-64 object-cover w-full rounded"
+      />
+    </figure>
+    <div class="card-body">
+      <h2 class="font-bold text-2xl"><%= product.name %></h2>
+      <p class="h-[60%]"><%= product.description %></p>
+      <p><%= product.price %>/- RS</p>
+    </div>
+    </div>
+    <h2 class="font-bold">#<%= product._id %></h2>
+  </div>
     <% } else { %>
     <p><%= message %></p>
     <% } %>

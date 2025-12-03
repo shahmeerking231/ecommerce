@@ -21,12 +21,12 @@ const userSpecificOrders = async (req, res) => {
             userId
         });
         if (orders) {
-            res.status(200).json({ success: true, orders });
+            return res.status(200).json({ success: true, orders });
         } else {
-            res.status(401).json({ success: false, message: "Products not found!" });
+            return res.status(401).json({ success: false, message: "Products not found!" });
         }
     } catch (error) {
-        res.status(500).json({ success: false, message: "Internal Server Error!" });
+        return res.status(500).json({ success: false, message: "Internal Server Error!" });
     }
 }
 
@@ -53,17 +53,20 @@ const createOrder = async (req, res) => {
 
 const changeDelivered = async (req, res) => {
     const { id } = req.body;
+    console.log("ORDER ID RECEIVED:", id);
+
     try {
-        const order = Order.findByIdAndUpdate(id, {
-            isDelivered: true
-        });
-        if (order) {
-            res.status(200).json({ success: true, order });
-        } else {
-            res.status(401).json({ success: false, message: "Order Not Found" });
+        const order = await Order.findByIdAndUpdate(
+            id,
+            { isDelivered: true },
+            { new: true }
+        );
+        if (!order) {
+            return res.status(404).json({ success: false, message: "Order Not Found" });
         }
+        return res.status(200).json({ success: true, message: "Order Delivered!" });
     } catch (error) {
-        res.status(500).json({ success: false, message: "Internal Server Error!" })
+        return res.status(500).json({ success: false, message: "Internal Server Error!" });
     }
 }
 

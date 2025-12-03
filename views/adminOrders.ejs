@@ -8,7 +8,7 @@
   </head>
   <body>
     <%- include('./partials/navbar.ejs') %>
-    <main class="min-h-screen flex flex-col text-black p-4 m-4">
+    <main class="flex flex-col-reverse text-black p-4 m-4">
       <% orders.forEach(order => { %>
       <div class="flex bg-base-100 shadow-sm rounded-xl overflow-hidden justify-between items-center p-4 m-4">
           <div>
@@ -27,7 +27,7 @@
            <% }); %>
           </div>
           <div>
-            <button <%=order.isDelivered ? disabled: ""  %> class="btn btn-outline btn-neutral">
+            <button onclick="changeDeleiverd('<%= order._id %>')" <%=order.isDelivered ? "disabled": ""  %> class="btn btn-outline btn-neutral" >
               <%= order.isDelivered ? "Delivered" : "Mark as Delivered" %>
             </button>
           </div>
@@ -39,6 +39,24 @@
     <script>
       const viewProduct = (productId) => {
         window.location.href = `/products/${productId}`;
+      }
+      const changeDeleiverd = async (id) => {
+       fetch(`/orders/delivered`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({id}),
+
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              toast(data.message,"success");
+            })
+            .catch((error) => {
+              toast(error.message,"error")
+            });
+            window.location.reload();
       }
     </script>
   </body>
