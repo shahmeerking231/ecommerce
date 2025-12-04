@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile Details</title>
+    <%- include('./partials/daisyui.ejs') %>
+  </head>
+  <body>
+    <%- include('./partials/navbar.ejs') %>
+    <main class="p-4 flex justify-center items-center min-h-[70vh]">
+      <div
+        class="p-8 px-12 border rounded-md flex flex-col justify-center items-center gap-4 mt-8"
+      >
+        <h2 class="font-bold text-xl mb-6">Profile Details</h2>
+        <div class="flex flex-col">
+          <label for="username">Username</label>
+          <input
+            class="p-2 rounded-md inputs"
+            type="text"
+            name="username"
+            id="username"
+            value="<%=user.username %>"
+            disabled="true"
+          />
+        </div>
+        <div class="flex flex-col">
+          <label for="email">Email</label>
+          <input
+            class="p-2 rounded-md"
+            type="email"
+            name="email"
+            id="email"
+            value="<%= user.email %>"
+            disabled="true"
+          />
+        </div>
+        <div class="flex flex-col">
+          <label for="location">Location</label>
+          <input
+            class="p-2 rounded-md inputs"
+            type="text"
+            name="location"
+            id="location"
+            value="<%= user.location %>"
+            disabled="true"
+          />
+        </div>
+        <button class="btn btn-primary editProfile">Edit Profile</button>
+      </div>
+    </main>
+    <%- include('./partials/script.ejs') %>
+    <script>
+      let editProfileBtn = document.querySelector(".editProfile");
+      const inputs = document.querySelectorAll(".inputs");
+
+      editProfileBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        // Enable inputs
+        inputs.forEach((input) => {
+          input.removeAttribute("disabled");
+        });
+
+        // Change button to "Save"
+        editProfileBtn.textContent = "Save";
+        editProfileBtn.classList.add("editDetails");
+        editProfileBtn.classList.remove("editProfile");
+
+        // Switch listener to save mode
+        editProfileBtn.addEventListener("click", saveProfile);
+      });
+
+      async function saveProfile(e) {
+        const email = document.getElementById("email").value;
+        const username = document.getElementById("username").value;
+        const location = document.getElementById("location").value;
+        e.preventDefault();
+
+        try {
+          const result = await fetch("/saveProfile", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email,
+                username,
+                location
+            }),
+          });
+          toast((await result.json()).message, "success");
+        } catch (error) {
+            toast(error.message, "error");
+        }
+
+        inputs.forEach((input) => {
+          input.disabled = true;
+        });
+      }
+    </script>
+  </body>
+</html>

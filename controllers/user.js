@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 
 const Signup = async (req, res) => {
-    const { username, email, password, location, isAdmin} = req.body;
+    const { username, email, password, location, isAdmin } = req.body;
     let hashPassword;
     try {
         hashPassword = await bcrypt.hash(password, 10);
@@ -54,7 +54,7 @@ const login = async (req, res) => {
             return res.render("login", { err: "Invalid Email or Password!" });
         }
         const token = jwt.sign(
-            { id: user._id, email: user.email, username: user.username, isAdmin: user.isAdmin },
+            { id: user._id, email: user.email, username: user.username, isAdmin: user.isAdmin, location: user.location },
             process.env.SECRET_KEY,
             { expiresIn: '1h' }
         );
@@ -77,8 +77,57 @@ const logout = (req, res) => {
     return res.redirect("/login");
 }
 
+const profile = (req, res) => {
+    const user = req.user;
+    if (!user) {
+        return res.redirect("/login");
+    }
+    return res.render("profileDetails", { user });
+}
+
+const saveProfile = async (req, res) => {
+    const { username, email, location } = req.body;
+    const userId = req.user.id; 
+
+    if (!username || !email || !location) {
+        return res.status(400).json({
+            success: false,
+            message: "All fields are required!"
+        });
+    }
+
+    try {
+        const user = await userSchema.findByIdAndUpdate(
+            userId,
+            { username, email, location },
+            { new: true }
+        );
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found!"
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            message: "Profile updated successfully",
+            user
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
+    }
+};
+
+
+
 module.exports = {
     Signup,
     login,
-    logout
+    logout,
+    profile,
+    saveProfile
 }
