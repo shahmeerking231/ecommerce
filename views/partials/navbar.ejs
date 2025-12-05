@@ -25,7 +25,7 @@
     >
     <a
       class="border-b border-transparent hover:border-b hover:border-black transition-all duration-200"
-      href="/orders"
+      href="<%= locals.user.isAdmin ? "/orders" : "/orders/user" %>"
       >Orders</a
     >
     <a

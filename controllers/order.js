@@ -15,15 +15,15 @@ const getOrders = async (req, res) => {
 }
 
 const userSpecificOrders = async (req, res) => {
-    const userId = req.user._id;
+    const user = req.user;
     try {
         let orders = await Order.find({
-            userId
+            userId: user.id
         });
         if (orders) {
-            return res.status(200).json({ success: true, orders });
+            return res.status(200).render("userOrders", {orders, user})
         } else {
-            return res.status(401).json({ success: false, message: "Products not found!" });
+            return res.status(401).render("userOrders", {message: "No orders Found!", user})
         }
     } catch (error) {
         return res.status(500).json({ success: false, message: "Internal Server Error!" });

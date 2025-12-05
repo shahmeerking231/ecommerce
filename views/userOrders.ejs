@@ -1,11 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <%- include('./partials/daisyui.ejs') %>
+  </head>
+  <body>
+    <%- include('./partials/navbar.ejs') %>
+
+    <main class="flex flex-col-reverse text-black p-4 m-4">
+      <% orders.forEach(order => { %>
+      <div
+        class="flex bg-base-100 shadow-sm rounded-xl overflow-hidden justify-between items-center p-4 m-4"
+      >
+        <div>
+          <h2 class="card-title">Order# <%= order.orderId %></h2>
+          <p class="text-sm text-gray-600">
+            Total Amount: <%= order.totalAmount %>
+          </p>
+          <span class="text-md font-semibold text-primary"
+            >Deleivery Date: <%= order.deliveryDate %></span
+          >
+        </div>
+        <div class="flex gap-4 w-[70%] overflow-x-auto text-xs">
+          <% order.products.forEach(product => { %>
+          <div
+            class="w-fit h-full border p-4 rounded cursor-pointer"
+            onclick="viewProduct('<%= product.product %>')"
+          >
+            <span
+              ><span class="font-bold">Product#</span> <%= product.product
+              %></span
+            ><span class="font-bold"> -</span>
+            <span class="text-gray-500"
+              ><span class="font-bold">Quantity:</span> <%= product.quantity
+              %></span
+            >
+          </div>
+          <% }); %>
+        </div>
+        <div>
+          <p class="p-4 rounded">
+            <%= order.isDelivered ? "Delivered" : "Pending" %>
+          </p>
+        </div>
+      </div>
+      <% }) %>
+    </main>
+    <%- include('./partials/footer.ejs')%> <%- include('./partials/script.ejs')
+    %> <%- include('./partials/script.ejs') %>
+    <script>
+      const viewProduct = (productId) => {
+        window.location.href = `/products/${productId}`;
+      };
+    </script>
+  </body>
 </html>

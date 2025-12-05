@@ -89,7 +89,7 @@
                 location
             }),
           });
-          toast((await result.json()).message, "success");
+          toast((await result.json()).message + ", Changes are applied after again login!", "success");
         } catch (error) {
             toast(error.message, "error");
         }
