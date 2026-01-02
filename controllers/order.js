@@ -18,7 +18,7 @@ const userSpecificOrders = async (req, res) => {
     const user = req.user;
     try {
         let orders = await Order.find({
-            userId: user.id
+            userId: user._id
         });
         if (orders) {
             return res.status(200).render("userOrders", {orders, user})
@@ -37,7 +37,7 @@ const createOrder = async (req, res) => {
     try {
         const order = await Order.create({
             products,
-            userId: req.user.id,
+            userId: req.user._id,
             orderId,
             deliveryDate,
             totalAmount

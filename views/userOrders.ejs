@@ -8,7 +8,8 @@
   <body>
     <%- include('./partials/navbar.ejs') %>
 
-    <main class="flex flex-col-reverse text-black p-4 m-4">
+    <main class="text-black p-4 m-4 min-h-screen">
+      <div class="flex flex-col-reverse">
       <% orders.forEach(order => { %>
       <div
         class="flex bg-base-100 shadow-sm rounded-xl overflow-hidden justify-between items-center p-4 m-4"
@@ -46,7 +47,9 @@
         </div>
       </div>
       <% }) %>
+      </div>
     </main>
+
     <%- include('./partials/footer.ejs')%> <%- include('./partials/script.ejs')
     %> <%- include('./partials/script.ejs') %>
     <script>

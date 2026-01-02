@@ -54,7 +54,7 @@ const login = async (req, res) => {
             return res.render("login", { err: "Invalid Email or Password!" });
         }
         const token = jwt.sign(
-            { id: user._id, email: user.email, username: user.username, isAdmin: user.isAdmin, location: user.location },
+            { _id: user._id, email: user.email, username: user.username, isAdmin: user.isAdmin, location: user.location },
             process.env.SECRET_KEY,
             { expiresIn: '1h' }
         );
@@ -87,7 +87,7 @@ const profile = (req, res) => {
 
 const saveProfile = async (req, res) => {
     const { username, email, location } = req.body;
-    const userId = req.user.id; 
+    const userId = req.user._id;
 
     if (!username || !email || !location) {
         return res.status(400).json({
