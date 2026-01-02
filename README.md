@@ -67,16 +67,16 @@ A feature-rich e-commerce web application built with Node.js and Express.js.  Th
 <div align="center">
 
 ### 🔐 User Authentication
-![Login Page](![image2](image2))
+![Login Page](https://ik.imagekit.io/xjv4rvhle/ecommerce_4.png)
 
 ### 🏠 Products Page
-![Products Page](![image3](image3))
+![Products Page](https://ik.imagekit.io/xjv4rvhle/ecommerce_1.png)
 
 ### 🛒 Shopping Cart
-![Shopping Cart](![image1](image1))
+![Shopping Cart](https://ik.imagekit.io/xjv4rvhle/ecommerce_3.png)
 
 ### 📦 Orders History
-![Orders Page](![image4](image4))
+![Orders Page](https://ik.imagekit.io/xjv4rvhle/ecommerce_2.png)
 
 </div>
 
