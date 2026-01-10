@@ -3,12 +3,14 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
-const staticRoute = require("./routes/staticRoute");
-const userRoute = require("./routes/user");
-const productRoute = require("./routes/product");
-const orderRoute = require("./routes/order");
-const testRoute = require("./routes/test")
-const connectToDb = require("./db/db");
+const cloudinaryConfig = require("./src/services/storage.service")
+
+const staticRoute = require("./src/routes/static.route");
+const authRoute = require("./src/routes/auth.route");
+const userRoute = require("./src/routes/user.route");
+const productRoute = require("./src/routes/product.route");
+const orderRoute = require("./src/routes/order.route");
+const connectToDb = require("./src/db/database.db");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,10 +18,13 @@ const PORT = process.env.PORT || 3000;
 //database
 connectToDb();
 
+//clodinary
+cloudinaryConfig();
+
 //configuration
 app.set("view engine", "ejs");
-app.set("views", path.resolve("./views"));
-var dir = path.join(__dirname, 'public/images');
+app.set("views", path.resolve("./src/views"));
+var dir = path.join(__dirname, 'public');
 app.use(express.static(dir));
 app.use('/products', express.static(dir));
 
@@ -30,9 +35,9 @@ app.use(cookieParser());
 
 //routes
 app.use("/", staticRoute);
-app.use("/", userRoute);
+app.use("/api/auth", authRoute);
+app.use("/user", userRoute);
 app.use("/products", productRoute);
-app.use("/orders", orderRoute);
-app.use("/test", testRoute);
+app.use("/", orderRoute);
 
 app.listen(PORT, () => console.log(`Server is listening on PORT ${PORT}`));

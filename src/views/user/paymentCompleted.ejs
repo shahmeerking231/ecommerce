@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Completed</title>
+    <%- include('../partials/daisyui.ejs') %>
+</head>
+
+<body>
+    <main class="h-screen w-full">
+        <% if (order) { %>
+         <section class="flex flex-col justify-center items-center h-full">
+            <div class="flex gap-2 mb-3">
+                <img src="/images/success.gif" alt="Success" class="w-10 h-10">
+                <h1 class="text-4xl font-bold mb-6">Payment Successful!</h1>
+            </div>
+            <p class="text-lg mb-4">Thank you for your purchase. Your order has been placed successfully.</p>
+            <p class="text-lg">Order ID: <span class="font-semibold">
+                    <%= order._id %>
+                </span></p>
+            <p>Delivery Date: <span class="font-semibold">
+                    <%= order.deliveryDate %>
+                </span></p>
+            <button onclick="window.location.href='/'" class="btn btn-primary mt-4">Continue Shopping</button>
+        </section>
+        <% } else { %>
+            <p class="text-center text-2xl font-bold mt-20">Order details not found.</p>
+         <% } %>
+    </main>
+    <%- include('../partials/errorHandle') %>
+
+        <script>
+            localStorage.removeItem("cart");
+        </script>
+</body>
+
+</html>

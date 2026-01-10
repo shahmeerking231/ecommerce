@@ -1,0 +1,44 @@
+<header>
+  <div class="p-6 flex justify-between items-center bg-blue-500">
+    <h1 class="lg:text-3xl md:text-2xl sm:text-2xl text-xl font-bold text-white">
+      E-Commerce Platform
+    </h1>
+    <div class="flex justify-center items-center gap-4">
+      <% if (locals.user.isAdmin) { %>
+        <button class="btn btn-neutral btn-soft" onclick="location.href='/addProduct'">
+          Add Product
+        </button>
+        <% } else { %>
+          <a class="font-bold text-[3vh]" href="/cart">🛒</a>
+          <% } %>
+            <a class="btn btn-error btn-soft" href="/api/auth/logout">Logout</a>
+    </div>
+  </div>
+  <nav class="w-full h-14 flex items-center justify-between gap-2 sm:gap-2 md:gap-6 lg:gap-6 border-b-1 px-8">
+    <div class="block sm:block lg:hidden md:hidden">
+      Nav
+    </div>
+    <div class="hidden gap-6 sm:hidden lg:flex md:flex">
+      <a class="border-b border-transparent hover:border-b hover:border-black transition-all duration-200"
+        href="/">Home</a>
+      <a class="border-b border-transparent hover:border-b hover:border-black transition-all duration-200"
+        href="<%= locals.user.isAdmin ? " /orders" : "/user/orders" %>"
+        >Orders</a>
+      <% if (!locals.user.isAdmin) { %>
+        <a class="border-b border-transparent hover:border-b hover:border-black transition-all duration-200"
+          href="/user/wishlist">Wishlist</a>
+        <% } %>
+          <a class="border-b border-transparent hover:border-b hover:border-black transition-all duration-200"
+            href="/user/profile">Profile</a>
+    </div>
+    <div>
+      <form action="/products/api/search" method="GET">
+        <input type="text" name="key" placeholder="Search products..."
+          class="input input-bordered w-52 sm:w-52 md:w-64 lg:w-64" />
+        <button type="submit" class="btn btn-primary btn-outline ml-2">
+          Search
+        </button>
+      </form>
+    </div>
+  </nav>
+</header>

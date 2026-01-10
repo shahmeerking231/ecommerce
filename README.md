@@ -40,6 +40,7 @@ A feature-rich e-commerce web application built with Node.js and Express.js.  Th
 ## ✨ Features
 
 ### 👥 User Features
+
 - 🔐 **User Authentication** - Secure login and signup system
 - 🛒 **Shopping Cart** - Add products to cart with quantity management
 - 📦 **Product Browsing** - View all available products with detailed information
@@ -49,12 +50,14 @@ A feature-rich e-commerce web application built with Node.js and Express.js.  Th
 - 👤 **User Profile** - Manage personal information
 
 ### 🔧 Admin Features
+
 - ➕ **Add Products** - Create new product listings
 - ✏️ **Edit Products** - Update existing product information
 - 🗑️ **Delete Products** - Remove products from inventory
 - 📈 **Product Management** - Full CRUD operations for inventory
 
 ### 🎨 Design Features
+
 - 📱 **Fully Responsive** - Works seamlessly on all devices
 - 🌓 **Modern UI/UX** - Clean and intuitive interface
 - 🎨 **DaisyUI Components** - Beautiful pre-styled components
@@ -67,16 +70,20 @@ A feature-rich e-commerce web application built with Node.js and Express.js.  Th
 <div align="center">
 
 ### 🔐 User Authentication
-![Login Page](![image2](image2))
+
+![Login Page](https://ik.imagekit.io/xjv4rvhle/ecommerce_4.png)
 
 ### 🏠 Products Page
-![Products Page](![image3](image3))
+
+![Products Page](https://ik.imagekit.io/xjv4rvhle/ecommerce_1.png)
 
 ### 🛒 Shopping Cart
-![Shopping Cart](![image1](image1))
+
+![Shopping Cart](https://ik.imagekit.io/xjv4rvhle/ecommerce_3.png)
 
 ### 📦 Orders History
-![Orders Page](![image4](image4))
+
+![Orders Page](https://ik.imagekit.io/xjv4rvhle/ecommerce_6.png)
 
 </div>
 
@@ -103,6 +110,7 @@ Follow these steps to set up the project locally:
 ### Prerequisites
 
 Make sure you have the following installed:
+
 - [Node.js](https://nodejs.org/) (v14 or higher)
 - [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
 - [Git](https://git-scm.com/)
@@ -111,8 +119,8 @@ Make sure you have the following installed:
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/shahmeerking231/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/shahmeerking231/ecommerce.git
+cd ecommerce
 ```
 
 ### Step 2: Install Dependencies
@@ -158,7 +166,8 @@ Navigate to `http://localhost:3000` to view the application.
 
 ## 💻 Usage
 
-### For Users: 
+### For Users
+
 1. **Sign Up/Login** - Create an account or login with existing credentials
 2. **Browse Products** - Explore the product catalog on the home page
 3. **Add to Cart** - Select products and add them to your cart with desired quantity
@@ -166,7 +175,8 @@ Navigate to `http://localhost:3000` to view the application.
 5. **Place Order** - Review your cart summary and place your order
 6. **Track Orders** - View your order history with delivery status
 
-### For Admins: 
+### For Admins
+
 1. **Login as Admin** - Use admin credentials to access admin features
 2. **Manage Products** - Add, edit, or delete products from the inventory
 3. **View Orders** - Monitor all orders placed by users
@@ -177,31 +187,38 @@ Navigate to `http://localhost:3000` to view the application.
 ## 📁 Project Structure
 
 ```
-├── views/                    # EJS templates
-│   ├── partials/             # Reusable components (header, footer)
-│   ├── user/                 # User-related views
-│   ├── admin/                # Admin-related views
-│   └── auth/                 # Authentication views
-├── routes/                   # Express routes
-│   ├── userRoutes.js
-│   ├── adminRoutes.js
-│   └── authRoutes.js
-├── controllers/              # Route controllers
-│   ├── userController.js
-│   ├── adminController.js
-│   └── authController.js
-├── models/                   # Database models
-│   ├── User.js
-│   ├── Product.js
-│   └── Order.js
-├── middleware/               # Custom middleware
-│   └── auth.js
-├── db/                       # DB Configuration files
-│   └── database.js
-├── . env                      # Environment variables
-├── app.js                    # Main application file
-├── package.json              # Project dependencies
-└── README.md                 # Project documentation
+├── src/
+│   ├── views/                    # EJS templates
+│   │   ├── partials/             # Reusable components (header, footer)
+│   │   ├── user/                 # User-related views
+│   │   ├── admin/                # Admin-related views
+│   │   └── auth/                 # Authentication views
+│   ├── routes/                   # Express routes
+│   │   ├── user.route.js
+│   │   ├── admin.route.js
+│   │   ├── auth.route.js
+│   │   ├── product.route.js
+│   │   └── order.route.js
+│   ├── controllers/              # Route controllers
+│   │   ├── user.controller.js
+│   │   ├── admin.controller. js
+│   │   ├── auth.controller.js
+│   │   ├── product.controller.js
+│   │   └── order. controller.js
+│   ├── models/                   # Database models
+│   │   ├── user.model.js
+│   │   ├── product.model.js
+│   │   └── order.model.js
+│   ├── middleware/               # Custom middleware
+│   │   └── auth.middleware.js
+│   ├── services/                 # Business logic services
+│   │   └── storage.service.js
+│   └── db/                       # DB Configuration files
+│       └── database.js
+├── . env                          # Environment variables
+├── index.js                        # Main application file
+├── package.json                  # Project dependencies
+└── README.md                     # Project documentation
 ```
 
 ---
@@ -213,14 +230,14 @@ We welcome contributions from the community! Here's how you can help:
 ### How to Contribute
 
 1. **Fork the Repository**
-   
-   Click the "Fork" button at the top right of this page. 
+
+   Click the "Fork" button at the top right of this page.
 
 2. **Clone Your Fork**
 
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
-   cd your-repo-name
+   git clone https://github.com/your-username/ecommerce.git
+   cd ecommerce
    ```
 
 3. **Create a New Branch**
@@ -229,7 +246,7 @@ We welcome contributions from the community! Here's how you can help:
    git checkout -b feature/your-feature-name
    ```
 
-   Use a descriptive branch name: 
+   Use a descriptive branch name:
    - `feature/add-payment-gateway`
    - `bugfix/fix-cart-calculation`
    - `docs/update-readme`
@@ -249,7 +266,7 @@ We welcome contributions from the community! Here's how you can help:
    ```
 
    Commit message prefixes:
-   - `Add: ` for new features
+   - `Add:` for new features
    - `Fix:` for bug fixes
    - `Update:` for updates to existing features
    - `Docs:` for documentation changes
@@ -280,7 +297,8 @@ We welcome contributions from the community! Here's how you can help:
 
 ### Reporting Issues
 
-Found a bug?  Have a feature request? Please [open an issue](https://github.com/shahmeerking231/your-repo-name/issues) with: 
+Found a bug?  Have a feature request? Please [open an issue](https://github.com/shahmeerking231/ecommerce/issues) with:
+
 - A clear title and description
 - Steps to reproduce (for bugs)
 - Expected vs actual behavior
@@ -306,7 +324,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-### ⭐ If you found this project helpful, please give it a star! 
+### ⭐ If you found this project helpful, please give it a star
 
 Made with ❤️ by [Shahmeer](https://github.com/shahmeerking231)
 

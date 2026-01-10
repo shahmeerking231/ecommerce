@@ -1,0 +1,36 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <% locals.products.forEach(product=> { %>
+    <div class="card bg-base-100 shadow-sm hover:shadow-md transition cursor-pointer">
+      <figure onclick="window.location.href='/products/<%=product._id%>'">
+        <img src="<%= product.imageURL %>" alt="<%= product.name %>" class="h-64 object-contain image-center w-full" />
+      </figure>
+      <div class="card-body border-t mt-2 p-2 px-4">
+        <div class="w-full flex justify-between items-center">
+          <div class="w-1/2">
+            <h2 class="card-title text-xl line-clamp-1">
+              <%= product.name %>
+            </h2>
+            <p class="line-clamp-2">
+              <%= product.description %>
+            </p>
+          </div>
+          <p class="w-1/2 flex justify-end font-semibold text-lg">
+            <%= product.price %>/- RS
+          </p>
+        </div>
+
+        <div class="card-actions justify-end">
+          <% if (locals.user.isAdmin) { %>
+            <button class="btn btn-outline btn-primary" onclick="editProduct('<%= JSON.stringify(product) %>')">
+              Edit
+            </button>
+            <button class="btn btn-outline btn-error" onclick="deleteProduct('<%= product._id %>')">
+              Delete
+            </button>
+
+            <% } %>
+        </div>
+      </div>
+    </div>
+    <% }) %>
+</div>

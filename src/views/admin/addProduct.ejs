@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Product</title>
+    <%- include('../partials/daisyui.ejs') %> <%-
+    include('../partials/formStyle.ejs') %>
+  </head>
+  <body>
+    <form
+      class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-6"
+      enctype="multipart/form-data"
+      action="/products"
+      method="post"
+    >
+      <div class="heading">
+        <h2>Add Product</h2>
+      </div>
+      <label class="label" for="name">Name</label>
+      <input class="input w-full" type="text" id="name" name="name" />
+
+      <label class="label" for="description">Description</label>
+      <input
+        class="input w-full"
+        type="text"
+        id="description"
+        name="description"
+      />
+
+      <label class="label" for="price">Price</label>
+      <input class="input w-full" type="number" id="price" name="price" />
+
+      <label class="label" for="imageURL">Image Url</label>
+      <input class="input w-full" type="file" id="imageURL" name="image" />
+
+      <label class="label" for="stock">Stock</label>
+      <input class="input w-full" type="number" id="stock" name="stock" />
+
+      <label class="label" for="category">Category</label>
+      <input class="input w-full" type="text" id="category" name="category" />
+
+      <button class="btn btn-neutral" type="submit">Add Product</button>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WishList</title>
+    <%- include('../partials/daisyui.ejs') %>
+</head>
+
+<body>
+    <%- include('../partials/navbar.ejs') %>
+        <main class="text-black p-4 m-4 min-h-screen">
+            <h2 class="text-2xl font-bold m-2">Your WishList</h2>
+            <div class="flex flex-wrap items-center justify-center">
+                <% if (wishlist.length===0) { %>
+                    <div class="flex flex-col items-center justify-center mt-20 flex-wrap">
+                        <h2 class="text-2xl font-bold mb-4">Your Wishlist is Empty</h2>
+                        <a href="/" class="btn btn-primary">Shop Now</a>
+                        <% } %>
+                            <% wishlist.forEach(item=> { %>
+                                <div class="card w-64 bg-base-100 shadow-xl m-4">
+                                    <figure><img src="<%= item.imageURL %>" alt="Product Image"
+                                            class="h-48 w-full object-cover cursor-pointer"
+                                            onclick=" window.location.href='/products/<%= item._id %>'"></figure>
+                                    <div class="card-body">
+                                        <h2 class="card-title line-clamp-2">
+                                            <%= item.name %>
+                                        </h2>
+                                        <p class="text-md font-semibold">Price: <%= item.price %>
+                                                /-RS</p>
+                                        <div class="card-actions justify-end">
+                                            <form action="/user/removeFromWishlist/<%= item._id %>" method="POST">
+                                                <button class="btn btn-error">Remove</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }) %>
+                    </div>
+        </main>
+        <%- include('../partials/footer.ejs')%>
+</body>
+
+</html>

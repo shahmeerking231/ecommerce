@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <%- include('../partials/daisyui.ejs') %>
+</head>
+
+<body>
+  <%- include('../partials/navbar.ejs') %>
+
+    <main class="text-black p-4 m-4 min-h-screen">
+      <div class="flex flex-wrap">
+        <% if (orders.length===0) { %>
+          <div class="flex flex-col items-center justify-center mt-20 flex-wrap">
+            <h2 class="text-2xl font-bold mb-4">No Orders Found</h2>
+            <a href="/" class="btn btn-primary">Shop Now</a>
+            <% } %>
+              <!-- <div id="test"  data-order="<%= orders %>" data-products="<%= products %>"></div> -->
+              <% orders.forEach(order=> { %>
+                <div
+                  class="flex bg-base-100 shadow-sm rounded-xl overflow-hidden justify-between gap-4 items-center p-4 m-4 border shadow-lg">
+                  <div class="h-full pt-2">
+                    <h2 class="card-title">Order# <%= order.orderId %>
+                    </h2>
+                    <p class="text-sm text-gray-600 mb-2">
+                      Total Amount: <%= order.totalAmount %>/-RS
+                    </p>
+                    <span class="text-md font-semibold text-primary">Delivery Date: <br> &nbsp; <%= order.deliveryDate
+                        %></span>
+                  </div>
+                  <div class="p-2">
+                    <% if (order.isDelivered) { %>
+                      <div class="mb-2">
+                        <button class="btn btn-accent invoice-btns" data-order-id="<%= order._id %>">Download
+                          Invoice</button>
+                      </div>
+                      <div id="<%= order._id %>"
+                        class="w-86 h-128 m-0 p-0 border border-black p-2 bg-aqua flex flex-col items-center justify-center bg-white hidden">
+                        <h2 class="text-xl font-bold p-2">Invoice</h2>
+                        <div class="w-full h-[95%] flex flex-col gap-6">
+                          <div class="flex items-center justify-between p-2">
+                            <p class="font-semibold">Order Id: <span class="text-md font-normal">
+                                #<%= order.orderId %>
+                              </span></p>
+                            <p class="font-semibold">Delivered On: <span class="text-md font-normal">
+                                <%= order.deliveryDate %>
+                              </span>
+                            </p>
+                          </div>
+                          <div class="flex flex-col items-center">
+                            <div class="w-full px-2">
+                              <h2 class="font-bold text-lg">Products Details: </h2>
+                            </div>
+                            <table class="mt-2 w-72">
+                              <tr class="p-1">
+                                <th class="p-1 border">Name</th>
+                                <th class="p-1 border">Price</th>
+                                <th class="p-1 border">Qty</th>
+                                <th class="p-1 border">Total</th>
+                              </tr>
+                              <% order.products.forEach(orderProduct=> { %>
+                                <% products.forEach(product=> { %>
+                                  <% if (product._id.toString()===orderProduct.product.toString()) { %>
+                                    <tr class="p-1 text-sm">
+                                      <td class="p-1 border line-clamp-1">
+                                        <%= product.name %>
+                                      </td>
+                                      <td class="p-1 border">
+                                        <%= product.price %>
+                                      </td>
+                                      <td class="p-1 border">
+                                        <%= orderProduct.quantity %>
+                                      </td>
+                                      <td class="p-1 border">
+                                        <%= Number(product.price) * Number(orderProduct.quantity) %>
+                                      </td>
+                                    </tr>
+                                    <% } %>
+                                      <% }) %>
+                                        <% }) %>
+                                          <tr class="p-1">
+                                            <th class="p-1 border">Total Price</th>
+                                            <th class="border   " colspan="3">
+                                              <%= order.totalAmount %>
+                                            </th>
+                                          </tr>
+                            </table>
+                          </div>
+                          <div class="w-full h-fit flex item-center justify-center mt-6 font-semibold text-lg">
+                            Thanks for Shopping!
+                          </div>
+                        </div>
+                        <div class="border-t w-full h-[5%] flex items-center justify-center text-sm">
+                          Generated at <%= new Date().toLocaleDateString() %> - <%= new Date().toLocaleTimeString() %>
+                        </div>
+                      </div>
+                      <% } %>
+                        <p class="mt-2 font-bold">
+                          Status: <%= order.isDelivered ? "Delivered" : "Pending" %>
+                        </p>
+                        <p class="mt-2 font-semibold">
+                          Payment: <%= order.payment %>
+                        </p>
+                  </div>
+                </div>
+                <% }) %>
+          </div>
+    </main>
+    <div class="absolute bg-slate-700 top-0 right-0 w-screen h-screen hidden" id="overlay">
+      <div class="flex w-full justify-end p-4">
+        <button class="btn btn-accent" id="closeOverlay">Close</button>
+      </div>
+      <div class="flex flex-col items-center justify-center w-full h-full" id="overlay-main-div">
+
+      </div>
+    </div>
+
+    <%- include('../partials/footer.ejs')%>
+      <script src="/javascript/common.js"></script>
+      <script>
+        const viewProduct = (productId) => {
+          window.location.href = `/products/${productId}`;
+        };
+
+      </script>
+      <script type="module">
+        import * as htmlToImage from 'https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/+esm';
+
+        const invoiceButtons = document.querySelectorAll('.invoice-btns');
+
+        invoiceButtons.forEach(invoiceButton => {
+          invoiceButton.addEventListener("click", async () => {
+            const orderId = invoiceButton.dataset.orderId;
+            const node = document.getElementById(orderId);
+
+            if (!node) {
+              console.error("Invoice node not found:", orderId);
+              return;
+            }
+
+            node.classList.remove('hidden');
+
+            await setTimeout(() => { }, 1000);
+
+            try {
+              const dataUrl = await htmlToImage.toPng(node, {
+                pixelRatio: 2,
+                cacheBust: true,
+                skipFonts: true,
+                filter: el => el.tagName !== 'SVG'
+              });
+
+              const link = document.createElement('a');
+              link.download = `invoice-${orderId}.png`;
+              link.href = dataUrl;
+              link.click();
+              await setTimeout(() => {
+                node.classList.add('hidden');
+              }, 500);
+
+            } catch (err) {
+              console.error("Invoice generation failed", err);
+            }
+          });
+        });
+      </script>
+
+</body>
+
+</html>

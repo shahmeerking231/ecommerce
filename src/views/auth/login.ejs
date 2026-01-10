@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <%- include('../partials/daisyui.ejs') %> <%-
+    include('../partials/formStyle.ejs') %>
+  </head>
+  <body>
+    <form
+      class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-6"
+      action="/api/auth/login"
+      method="post"
+    >
+      <div class="heading">
+        <h2>Login</h2>
+      </div>
+      <label class="label">Email</label>
+      <input type="email" class="input" placeholder="Email" name="email" />
+
+      <label class="label">Password</label>
+      <input
+        type="password"
+        class="input"
+        placeholder="Password"
+        name="password"
+      />
+      <button class="btn btn-neutral mt-4" type="submit">Login</button>
+      <a href="/sign-up">Sign up</a>
+    </form>
+    <%- include('../partials/errorHandle.ejs') %>
+  </body>
+</html>
