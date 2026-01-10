@@ -8,7 +8,7 @@ router.get("/orders", authenticateAdmin, orderController.getOrders);
 router.get("/user/orders", authenticateToken, orderController.userSpecificOrders);
 router.post("/orders", authenticateToken, orderController.createOrder);
 router.post("/orders/delivered", authenticateAdmin, orderController.changeDelivered);
-router.get("/complete/:orderId", authenticateToken, orderController.paymentCompleted);
+router.get("/complete", authenticateToken, orderController.paymentCompleted);
 router.get("/cancel/:orderId", authenticateToken, orderController.paymentFailed);
 
 module.exports = router;

@@ -70,7 +70,7 @@ const createOrder = async (req, res) => {
                     }
                 }),
                 mode: "payment",
-                success_url: `http://localhost:${process.env.PORT || 3000}/complete/${orderId}`,
+                success_url: `http://localhost:${process.env.PORT || 3000}/complete?session_id={CHECKOUT_SESSION_ID}&orderId=${orderId}`,
                 cancel_url: `http://localhost:${process.env.PORT || 3000}/cancel/${orderId}`,
             });
             sessionUrl = session.url;
@@ -141,8 +141,19 @@ const changeDelivered = async (req, res) => {
 }
 
 const paymentCompleted = async (req, res) => {
-    const { orderId } = req.params;
+    const { session_id, orderId } = req.query;
+
     try {
+        const session = await stripe.checkout.sessions.retrieve(session_id);
+
+        if (!session) {
+            return res.status(404).render("./user/paymentCompleted", { success: false, message: "Session Not Found!", order: null });
+        }
+
+        if (session.payment_status !== "paid") {
+            return res.status(400).render("./user/paymentCompleted", { success: false, message: "Payment Not Completed!", order: null });
+        }
+
         const order = await Order.findOneAndUpdate(
             { orderId: orderId },
             { payment: "Paid" },
