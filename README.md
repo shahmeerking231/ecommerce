@@ -70,16 +70,25 @@ A feature-rich e-commerce web application built with Node.js and Express.js.  Th
 <div align="center">
 
 ### 🔐 User Authentication
-![Login Page](![image2](image2))
+![Login](Ref_Images/Login.png)
 
-### 🏠 Products Page
-![Products Page](![image3](image3))
+### 🏠 Home Page
+![Home](Ref_Images/Home_Section.png)
 
 ### 🛒 Shopping Cart
-![Shopping Cart](![image1](image1))
+![Cart](Ref_Images/Cart_Section.png)
 
 ### 📦 Orders History
-![Orders Page](![image4](image4))
+![Orders](Ref_Images/Order_Section.png)
+
+### 📝 WishList
+![WishList](Ref_Images/WishList_View.png)
+
+### $ Stripe Payment
+![Stripe Payment](Ref_Images/Payment.png)
+
+### ✅ Payment Success
+![Payment Success](Ref_Images/Payment_Success.png)
 
 </div>
 
@@ -315,8 +324,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Shahmeer**
 
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/shahmeerking231)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/your-profile)
-[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:your-email@example.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)]([https://linkedin.com/in/your-profile](https://www.linkedin.com/in/shahmeer-jabbar-089275260/))
+[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:kingshahmeer231@gmail.com)
 
 ---
 
