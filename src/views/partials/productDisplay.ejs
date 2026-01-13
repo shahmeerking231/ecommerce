@@ -1,5 +1,5 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-  <% locals.products.forEach(product=> { %>
+  <% locals?.products?.forEach(product=> { %>
     <div class="card bg-base-100 shadow-sm hover:shadow-md transition cursor-pointer">
       <figure onclick="window.location.href='/products/<%=product._id%>'">
         <img src="<%= product.imageURL %>" alt="<%= product.name %>" class="h-64 object-contain image-center w-full" />

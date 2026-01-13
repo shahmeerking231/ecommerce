@@ -3,7 +3,10 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
-const cloudinaryConfig = require("./src/services/storage.service")
+const cloudinaryConfig = require("./src/services/storage.service");
+//Redis Server Start
+const {startRedis} = require("./src/services/cache.service");
+startRedis();
 
 const staticRoute = require("./src/routes/static.route");
 const authRoute = require("./src/routes/auth.route");

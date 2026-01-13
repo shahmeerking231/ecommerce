@@ -1,6 +1,7 @@
 const cloudinary = require("cloudinary").v2;
 const Product = require("../models/product.model");
 const User = require("../models/user.model");
+const { redisClient } = require("../services/cache.service");
 
 const getProduct = async (req, res) => {
     try {
@@ -42,6 +43,7 @@ const createProduct = async (req, res) => {
 const getProductById = async (req, res) => {
     const { id } = req.params;
     let user = req.user;
+    let cacheKey = `product_${id}`;
     if (user) {
         try {
             const dbUser = await User.findById(user._id);
@@ -51,9 +53,20 @@ const getProductById = async (req, res) => {
         }
     }
     try {
-        let product = await Product.findOne({
-            _id: id
-        });
+        let product;
+        const cachedData = await redisClient.get(cacheKey);
+
+        if (cachedData) {
+            product = JSON.parse(cachedData);
+        } else {
+            product = await Product.findOne({
+                _id: id
+            });
+            await redisClient.set(cacheKey, JSON.stringify(product), {
+                EX: 3600
+            });
+        }
+
         if (product) {
             return res.status(200).render("./common/productView", { success: true, product, user: user });
         } else {
@@ -123,17 +136,51 @@ const searchProduct = async (req, res) => {
     }
 }
 
+const getProductsByCategory = async (req, res) => {
+    const { category } = req.params;
+    try {
+        let products = await Product.find({ category: category });
+        console.log(products)
+        if (products) {
+            return res.status(200).render("./common/categoryProducts", { success: true, products, user: req.user, category: category });
+        }
+        return res.status(401).json({ success: false, message: "No Products Found!" });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Internal Server error" });
+    }
+}
+
 const renderHome = async (req, res) => {
     const user = req.user;
-    let products = await Product.find();
-    if (req.user.isAdmin) {
-        if (!products) return res.render("./admin/home", { error: "Products not found", user: user });
-        else return res.render("./admin/home", { products: products, user: user });
+    let cacheKey = "all_products";
+
+    try {
+
+        let products;
+        const cachedData = await redisClient.get(cacheKey);
+
+        if (cachedData) {
+            products = JSON.parse(cachedData);
+        } else {
+            products = await Product.find();
+            await redisClient.set(cacheKey, JSON.stringify(products), {
+                EX: 3600
+            });
+        }
+
+        if (req.user.isAdmin) {
+            if (!products) return res.render("./admin/home", { error: "Products not found", user: user });
+            else return res.render("./admin/home", { products: products, user: user });
+        }
+        else {
+            if (!products) return res.render("./user/home", { error: "Products not found", user: user });
+            else return res.render("./user/home", { products: products, user: user });
+        }
+
+    } catch (err) {
+        console.error("Error fetching user:", err);
     }
-    else {
-        if (!products) return res.render("./user/home", { error: "Products not found", user: user });
-        else return res.render("./user/home", { products: products, user: user });
-    }
+
 }
 
 module.exports = ({
@@ -143,5 +190,6 @@ module.exports = ({
     deleteProductById,
     updateProductById,
     searchProduct,
+    getProductsByCategory,
     renderHome
 })

@@ -13,12 +13,12 @@
         <main class="text-black p-4 m-4 min-h-screen">
             <h2 class="text-2xl font-bold m-2">Your WishList</h2>
             <div class="flex flex-wrap items-center justify-center">
-                <% if (wishlist.length===0) { %>
+                <% if (wishlist?.length===0 || wishlist === null || undefined) { %>
                     <div class="flex flex-col items-center justify-center mt-20 flex-wrap">
                         <h2 class="text-2xl font-bold mb-4">Your Wishlist is Empty</h2>
                         <a href="/" class="btn btn-primary">Shop Now</a>
-                        <% } %>
-                            <% wishlist.forEach(item=> { %>
+                        <% } else { %>
+                            <% wishlist?.forEach(item=> { %>
                                 <div class="card w-64 bg-base-100 shadow-xl m-4">
                                     <figure><img src="<%= item.imageURL %>" alt="Product Image"
                                             class="h-48 w-full object-cover cursor-pointer"
@@ -37,6 +37,8 @@
                                     </div>
                                 </div>
                                 <% }) %>
+                                    <% } %>
+
                     </div>
         </main>
         <%- include('../partials/footer.ejs')%>

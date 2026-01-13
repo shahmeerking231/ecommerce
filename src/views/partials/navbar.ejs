@@ -14,11 +14,14 @@
             <a class="btn btn-error btn-soft" href="/api/auth/logout">Logout</a>
     </div>
   </div>
-  <nav class="w-full h-14 flex items-center justify-between gap-2 sm:gap-2 md:gap-6 lg:gap-6 border-b-1 px-8">
-    <div class="block sm:block lg:hidden md:hidden">
-      Nav
-    </div>
-    <div class="hidden gap-6 sm:hidden lg:flex md:flex">
+  <div class="block sm:block lg:hidden md:hidden border-b-1 w-full h-14 flex justify-end items-center p-4"
+    id="hamburger">
+    <img src="/images/hamburger.png" alt="Hamburger" height="50px" width="50px">
+  </div>
+  <nav
+    class="h-3/4 sm:h-3/4 w-3/5 sm:w-3/5 md:w-full lg:w-full md:h-14 lg:h-14 flex items-center justify-between hidden gap-6 flex-col sm:hidden lg:flex md:flex sm:flex-col md:flex-row lg:flex-row lg:border-b-1 px-8 m-4 md:m-0 lg:m-0"
+    id="nav">
+    <div class="flex gap-6 flex-col sm:flex-col md:flex-row lg:flex-row">
       <a class="border-b border-transparent hover:border-b hover:border-black transition-all duration-200"
         href="/">Home</a>
       <a class="border-b border-transparent hover:border-b hover:border-black transition-all duration-200"
@@ -42,3 +45,22 @@
     </div>
   </nav>
 </header>
+<script>
+  const hamburger = document.getElementById("hamburger");
+  const nav = document.getElementById("nav");
+  hamburger.addEventListener("click", () => {
+    nav.classList.toggle("hidden");
+    nav.classList.toggle("sm:hidden");
+    nav.classList.toggle("items-center");
+  });
+
+  // Close the nav when a link is clicked (for better UX on mobile)
+  const navLinks = nav.querySelectorAll("a");
+  navLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      if (!nav.classList.contains("hidden")) {
+        nav.classList.add("hidden");
+      }
+    });
+  });
+</script>

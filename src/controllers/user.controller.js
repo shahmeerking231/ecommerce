@@ -1,5 +1,6 @@
 const User = require("../models/user.model");
 const Product = require("../models/product.model");
+const { redisClient } = require("../services/cache.service");
 
 const profile = (req, res) => {
   const user = req.user;
@@ -49,10 +50,9 @@ const saveProfile = async (req, res) => {
 const ratingProductById = async (req, res) => {
   let { rating, productId } = req.body;
   try {
-    let prevRating = await Product.findById(productId);
+    let prevRating = await Product.findById(productId).select("rating");
     if (Number(prevRating) !== 0) {
       rating = Number((prevRating.rating + rating) / 2);
-      console.log(rating)
     }
     let product = await Product.findByIdAndUpdate(productId, {
       rating
@@ -97,10 +97,22 @@ const addToWishlist = async (req, res) => {
 
 const getWishlist = async (req, res) => {
   const userId = req.user._id;
+  const cacheKey = `wishlist_${userId}`;
   try {
-    const user = await User.findById(userId).populate("wishlist");
+    let wishlist;
+    const cachedData = await redisClient.get(cacheKey);
+    if (cachedData) {
+      wishlist = JSON.parse(cachedData);
+    } else {
+      wishlist = await User.findById(userId).populate("wishlist").select("wishlist");
+      if (wishlist) {
+        await redisClient.set(cacheKey, JSON.stringify(wishlist), {
+          EX: 3600, // Cache for 1 hour
+        });
+      }
+    }
     return res.status(200).render("./user/wishlist", {
-      wishlist: user.wishlist,
+      wishlist: wishlist.wishlist,
       user: req.user
     });
   } catch (error) {
