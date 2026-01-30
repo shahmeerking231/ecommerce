@@ -31,7 +31,8 @@ const createProduct = async (req, res) => {
             imageSignature: result.signature
         });
         if (product) {
-            return res.status(200).json({ success: true, product });
+            redisClient.del("all_products");
+            return res.status(200).redirect("/admin/addProduct");
         } else {
             return res.status(401).json({ success: false, message: "Product Not Created" });
         }

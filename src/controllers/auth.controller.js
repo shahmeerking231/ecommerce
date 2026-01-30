@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 
 const register = async (req, res) => {
-    const { username, email, password, location, isAdmin = true } = req.body;
+    const { username, email, password, location, isAdmin } = req.body;
     let hashPassword;
     try {
         hashPassword = await bcrypt.hash(password, 10);
