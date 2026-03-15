@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 3000;
 //database
 connectToDb();
 
-//clodinary
+//cloudinary
 cloudinaryConfig();
 
 //configuration
