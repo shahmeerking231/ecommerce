@@ -5,6 +5,7 @@ const connectToDatabase = () => {
     console.log("Connected to DB!");
   }).catch((error) => {
     console.log("An error occurred", error);
+    process.exit(0);
   })
 }
 

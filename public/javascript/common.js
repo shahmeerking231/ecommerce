@@ -1,0 +1,19 @@
+const toast = (msg, type) => {
+    const toastDiv = document.createElement("div");
+    toastDiv.classList.add("toast", "toast-bottom", "toast-end");
+    const toastInnerDiv = document.createElement("div");
+    toastInnerDiv.className = `alert alert-${type}`;
+    toastInnerDiv.innerHTML = `<div><span>${msg}</span></div>`;
+    toastDiv.appendChild(toastInnerDiv);
+    document.body.appendChild(toastDiv);
+    setTimeout(() => {
+        document.body.removeChild(toastDiv);
+    }, 3000);
+};
+
+const links = document.querySelectorAll("nav a");
+links.forEach((link) => {
+    if (link.href === window.location.href) {
+        link.classList.add("active-link");
+    }
+});
