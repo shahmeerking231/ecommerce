@@ -91,7 +91,7 @@
     🛒 Your Cart
   </header>
 
-  <main class="min-h-screen flex flex-wrap">
+  <main class="min-h-screen flex flex-wrap justify-center">
     <section id="cart-section"></section>
 
     <aside>
@@ -154,7 +154,9 @@
         totalPrice += item.product.price * item.quantity;
 
         section.innerHTML += `
-        <div class="flex bg-base-100 shadow-lg rounded-md border p-2 overflow-hidden">
+        <div class="flex shadow-lg rounded-md border p-2 overflow-hidden flex-wrap gap-4">
+          <button class="btn btn-error btn-sm remove-item py-1 px-2 rounded-md border h-fit bg-red-500 flex items-center justify-center hover:bg-red-600" data-id="${item.product._id
+          }"><span class= "invert h-fit w-fit">╳</span></button>
           <img
             class="w-[18vh] h-[18vh] object-cover rounded-l-xl"
             src="${item.product.imageURL ||
@@ -162,7 +164,7 @@
           }"
             alt="${item.product.name}"
           />
-          <div class="card-body p-4 flex w-full justify-between">
+          <div class="card-body flex w-[70%] justify-between">
             <div>
               <h2 class="card-title line-clamp-1">${item.product.name}</h2>
               <p class="text-sm text-gray-600 line-clamp-1">${item.product.description}</p>
@@ -174,8 +176,7 @@
               </div>
             </div>
             </div>
-            <button class="btn btn-error btn-sm remove-item py-1 px-2 rounded-md border h-fit bg-red-500 flex items-center justify-center hover:bg-red-600" data-id="${item.product._id
-          }"><span class= "invert h-fit w-fit">╳</span></button>
+            
         </div>`;
       });
     }
