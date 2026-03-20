@@ -46,7 +46,11 @@ const createOrder = async (req, res) => {
         for (const item of products) {
             let product = await Product.findById(item.product._id);
             if (product.stock < item.quantity) {
-                return res.status(409).json({ success: false, message: "Product Sold out", product: product.name });
+                if (product.stock === 0) {
+                    return res.status(409).json({ success: false, message: "Product Sold out", product: product.name });
+                } else {
+                    return res.status(409).json({ success: false, message: `Only ${product.stock} items left in stock`, product: product.name });
+                }
             }
             productsToSave.push({
                 product: item.product._id,
@@ -70,8 +74,8 @@ const createOrder = async (req, res) => {
                     }
                 }),
                 mode: "payment",
-                success_url: `http://localhost:${process.env.PORT || 3000}/complete?session_id={CHECKOUT_SESSION_ID}&orderId=${orderId}`,
-                cancel_url: `http://localhost:${process.env.PORT || 3000}/cancel/${orderId}`,
+                success_url: `${process.env.SITE_URL || `http://localhost:${process.env.PORT || 3000}`}/complete?session_id={CHECKOUT_SESSION_ID}&orderId=${orderId}`,
+                cancel_url: `${process.env.SITE_URL || `http://localhost:${process.env.PORT || 3000}`}/cancel/${orderId}`,
             });
             sessionUrl = session.url;
         }
