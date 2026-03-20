@@ -17,7 +17,7 @@ const saveProfile = async (req, res) => {
   if (!username || !email || !location) {
     return res.status(400).json({
       success: false,
-      message: "All fields are required!",
+      error: "All fields are required!",
     });
   }
 
@@ -30,7 +30,7 @@ const saveProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found!",
+        error: "User not found!",
       });
     }
     return res.status(200).json({
@@ -42,7 +42,7 @@ const saveProfile = async (req, res) => {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      error: "Internal server error",
     });
   }
 };
@@ -65,11 +65,11 @@ const ratingProductById = async (req, res) => {
     if (product) {
       return res.status(200).json({ success: true, product });
     } else {
-      return res.status(404).json({ success: false, message: "Product Not Found!" });
+      return res.status(404).json({ success: false, error: "Product Not Found!" });
     }
   } catch (error) {
     console.log(error)
-    return res.status(500).json({ success: false, message: "Internal Server Error a raha ha?" });
+    return res.status(500).json({ success: false, error: "Internal Server Error a raha ha?" });
   }
 };
 
@@ -90,7 +90,7 @@ const addToWishlist = async (req, res) => {
     console.log(error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error",
+      error: "Internal server error",
     });
   }
 };
@@ -127,21 +127,34 @@ const getWishlist = async (req, res) => {
 const removeFromWishlist = async (req, res) => {
   const userId = req.user._id;
   const { productId } = req.params;
+  const cacheKey = `wishlist_${userId}`;
   try {
     const user = await User.findByIdAndUpdate(
       userId,
       { $pull: { wishlist: productId } },
       { new: true }
     ).populate("wishlist");
-    return res.status(200).json({
-      success: true,
+
+    if (!user) {
+      return res.status(404).render("./user/wishlist", {
+        wishlist: [],
+        user: req.user,
+        error: "User not found"
+      });
+    }
+
+    await redisClient.del(cacheKey);
+
+    return res.status(200).render("./user/wishlist", {
       wishlist: user.wishlist,
+      user: req.user,
+      message: "Product removed from wishlist successfully"
     });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      success: false,
-      message: "Internal server error",
+    return res.status(500).render("./user/wishlist", {
+      wishlist: [],
+      user: req.user,
+      error: "Internal server error"
     });
   }
 };

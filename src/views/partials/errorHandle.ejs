@@ -1,17 +1,21 @@
 <div class="toast toast-top toast-end">
-  <% if (typeof err !== 'undefined' && err) { %>
-  <div class="alert alert-error" id="errorToast">
-    <div>
-      <span><%= err %></span>
+  <% if (typeof error !=='undefined' && error || typeof message !=='undefined' && message) { %>
+    <div class="alert <% if (typeof error !=='undefined' && error) { %>alert-error<% } else { %>alert-info<% } %>">
+      <div>
+        <span>
+          <%= typeof error !== 'undefined' && error ? error : message %>
+        </span>
+      </div>
     </div>
-  </div>
-  <% } %>
+    <% } %>
 </div>
 <script>
-  const errorToast = document.getElementById("errorToast");
-  if (errorToast) {
-    setTimeout(() => {
-      errorToast.style.display = "none";
-    }, 3000);
+  const toasts = document.querySelectorAll(".alert");
+  if (toasts.length > 0) {
+    toasts.forEach((toast) => {
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    });
   }
 </script>

@@ -1,50 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Profile Details</title>
-    <%- include('../partials/daisyui.ejs') %>
-  </head>
-  <body>
-    <%- include('../partials/navbar.ejs') %>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile Details</title>
+  <%- include('../partials/daisyui.ejs') %>
+</head>
+
+<body>
+  <%- include('../partials/navbar.ejs') %>
     <main class="p-4 flex justify-center items-center min-h-[70vh]">
-      <div
-        class="p-8 px-12 border rounded-md flex flex-col justify-center items-center gap-4 mt-8"
-      >
+      <div class="p-8 px-12 border rounded-md flex flex-col justify-center items-center gap-4 mt-8">
         <h2 class="font-bold text-xl mb-6">Profile Details</h2>
         <div class="flex flex-col">
           <label for="username">Username</label>
-          <input
-            class="p-2 rounded-md inputs"
-            type="text"
-            name="username"
-            id="username"
-            value="<%=user.username %>"
-            disabled="true"
-          />
+          <input class="p-2 rounded-md inputs" type="text" name="username" id="username" value="<%=user.username %>"
+            disabled="true" />
         </div>
         <div class="flex flex-col">
           <label for="email">Email</label>
-          <input
-            class="p-2 rounded-md"
-            type="email"
-            name="email"
-            id="email"
-            value="<%= user.email %>"
-            disabled="true"
-          />
+          <input class="p-2 rounded-md" type="email" name="email" id="email" value="<%= user.email %>"
+            disabled="true" />
         </div>
         <div class="flex flex-col">
           <label for="location">Location</label>
-          <input
-            class="p-2 rounded-md inputs"
-            type="text"
-            name="location"
-            id="location"
-            value="<%= user.location %>"
-            disabled="true"
-          />
+          <input class="p-2 rounded-md inputs" type="text" name="location" id="location" value="<%= user.location %>"
+            disabled="true" />
         </div>
         <button class="btn btn-primary editProfile">Edit Profile</button>
       </div>
@@ -89,11 +71,17 @@
               location,
             }),
           });
-          toast(
-            (await result.json()).message +
-              ", Changes are applied after again login!",
-            "success"
-          );
+
+          if (!result.ok) {
+            toast("Failed to save profile details", "error");
+          }
+          else {
+            toast(
+              (await result.json()).message +
+              ", please refresh the page to see the changes",
+              "success"
+            );
+          }
         } catch (error) {
           toast(error.message, "error");
         }
@@ -103,5 +91,6 @@
         });
       }
     </script>
-  </body>
+</body>
+
 </html>

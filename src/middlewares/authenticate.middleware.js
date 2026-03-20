@@ -1,31 +1,50 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/user.model");
 
-const authenticateToken = (req, res, next) => {
-    const token = req.cookies ? req.cookies.token : undefined;
-    if (token === null && token === undefined) {
+const authenticateToken = async (req, res, next) => {
+    const token = req.cookies?.token;
+
+    if (!token) {
         return res.redirect("/login");
     }
-    jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
-        if (err) {
+
+    try {
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
+
+        const user = await User.findById(decoded._id);
+
+        if (!user) {
             return res.redirect("/login");
         }
+
         req.user = user;
         next();
-    });
+    } catch (err) {
+        return res.redirect("/login");
+    }
 }
 
-const authenticateAdmin = (req, res, next) => {
-    const token = req.cookies ? req.cookies.token : undefined;
-    if (token === null && token === undefined) {
+const authenticateAdmin = async (req, res, next) => {
+    const token = req.cookies?.token;
+
+    if (!token) {
         return res.redirect("/login");
     }
-    jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
-        if (err || !user.isAdmin) {
+
+    try {
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
+
+        const user = await User.findById(decoded._id);
+
+        if (!user || !user.isAdmin) {
             return res.redirect("/login");
         }
+
         req.user = user;
         next();
-    });
+    } catch (err) {
+        return res.redirect("/login");
+    }
 }
 
 module.exports = { authenticateToken, authenticateAdmin };

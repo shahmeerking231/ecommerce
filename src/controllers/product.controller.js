@@ -11,7 +11,7 @@ const getProduct = async (req, res) => {
         }
         return res.status(401).json({ success: false, message: "No Products Found!" });
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server error" });
+        return res.status(500).json({ success: false, error: "Internal Server error" });
     }
 }
 
@@ -37,7 +37,7 @@ const createProduct = async (req, res) => {
             return res.status(401).json({ success: false, message: "Product Not Created" });
         }
     } catch (error) {
-        return res.status(500).json({ success: false, err: `Internal Server Error, Try Again! ${error}` });
+        return res.status(500).json({ success: false, error: `Internal Server Error, Try Again! ${error}` });
     }
 }
 
@@ -93,7 +93,7 @@ const deleteProductById = async (req, res) => {
             return res.status(404).json({ success: false, message: "Product Not Found!" });
         }
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error" });
+        return res.status(500).json({ success: false, error: "Internal Server Error" });
     }
 }
 
@@ -115,7 +115,7 @@ const updateProductById = async (req, res) => {
             return res.status(404).json({ success: false, message: "Product Not Found!" });
         }
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error" });
+        return res.status(500).json({ success: false, error: "Internal Server Error" });
     }
 }
 
@@ -133,7 +133,7 @@ const searchProduct = async (req, res) => {
         }
         return res.status(401).render("./common/searchResults", { success: false, message: "No Products Found!", user: req.user, searchQuery: key });
     } catch (error) {
-        return res.status(500).render("./common/searchResults", { success: false, message: "Internal Server error", user: req.user });
+        return res.status(500).render("./common/searchResults", { success: false, error: "Internal Server error", user: req.user });
     }
 }
 
@@ -147,7 +147,7 @@ const getProductsByCategory = async (req, res) => {
         }
         return res.status(401).json({ success: false, message: "No Products Found!" });
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server error" });
+        return res.status(500).json({ success: false, error: "Internal Server error" });
     }
 }
 
@@ -174,7 +174,7 @@ const renderHome = async (req, res) => {
             else return res.render("./admin/home", { products: products, user: user });
         }
         else {
-            if (!products) return res.render("./user/home", { error: "Products not found", user: user });
+            if (!products) return res.render("./user/home", { message: "Products not found", user: user });
             else return res.render("./user/home", { products: products, user: user });
         }
 

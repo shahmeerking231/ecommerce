@@ -91,7 +91,7 @@
     🛒 Your Cart
   </header>
 
-  <main class="min-h-screen">
+  <main class="min-h-screen flex flex-wrap">
     <section id="cart-section"></section>
 
     <aside>
@@ -180,7 +180,6 @@
       });
     }
 
-    // Update totals
     totalItemsEl.textContent = totalItems;
     totalPriceEl.textContent = totalPrice.toFixed(2);
 

@@ -10,7 +10,7 @@ const getOrders = async (req, res) => {
         if (orders) {
             return res.status(200).render("./admin/orders", { success: true, orders, user });
         }
-        else return res.status(401).render("./admin/orders", { success: false, error: "No Orders Found" });
+        else return res.status(401).render("./admin/orders", { success: false, message: "No Orders Found" });
     } catch (err) {
         return res.status(500).render("./admin/orders", { success: false, error: "Internal Server Error!" });
     }
@@ -110,8 +110,7 @@ const createOrder = async (req, res) => {
         }
         return res.status(401).json({ success: false, message: "Order Not Created" });
     } catch (error) {
-        return res.status(500).json({ success: false, err: `Internal Server Error, Try Again! ${error}` });
-        console.log(error)
+        return res.status(500).json({ success: false, error: `Internal Server Error, Try Again! ${error}` });
     }
 }
 
@@ -136,7 +135,7 @@ const changeDelivered = async (req, res) => {
         }
         return res.status(200).json({ success: true, message: "Order Delivered!" });
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Internal Server Error!" });
+        return res.status(500).json({ success: false, error: "Internal Server Error!" });
     }
 }
 
@@ -147,11 +146,11 @@ const paymentCompleted = async (req, res) => {
         const session = await stripe.checkout.sessions.retrieve(session_id);
 
         if (!session) {
-            return res.status(404).render("./user/paymentCompleted", { success: false, message: "Session Not Found!", order: null });
+            return res.status(404).render("./user/paymentCompleted", { success: false, error: "Session Not Found!", order: null });
         }
 
         if (session.payment_status !== "paid") {
-            return res.status(400).render("./user/paymentCompleted", { success: false, message: "Payment Not Completed!", order: null });
+            return res.status(400).render("./user/paymentCompleted", { success: false, error: "Payment Not Completed!", order: null });
         }
 
         const order = await Order.findOneAndUpdate(
@@ -160,12 +159,12 @@ const paymentCompleted = async (req, res) => {
             { new: true }
         );
         if (!order) {
-            return res.status(404).render("./user/paymentCompleted", { success: false, message: "Order Not Found", order: null });
+            return res.status(404).render("./user/paymentCompleted", { success: false, error: "Order Not Found", order: null });
         }
         return res.status(200).render("./user/paymentCompleted", { order });
     }
     catch (error) {
-        return res.status(500).render("./user/paymentCompleted", { success: false, message: "Internal Server Error!", order: null });
+        return res.status(500).render("./user/paymentCompleted", { success: false, error: "Internal Server Error!", order: null });
     }
 }
 
@@ -178,13 +177,12 @@ const paymentFailed = async (req, res) => {
             { new: true }
         );
         if (!order) {
-
-            return res.status(404).render("./user/paymentFailed", { success: false, message: "Order Not Found", order: null });
+            return res.status(404).render("./user/paymentFailed", { success: false, error: "Order Not Found", order: null });
         }
         return res.status(200).render("./user/paymentFailed", { order });
     }
     catch (error) {
-        return res.status(500).render("./user/paymentFailed", { success: false, message: "Internal Server Error!", order: null });
+        return res.status(500).render("./user/paymentFailed", { success: false, error: "Internal Server Error!", order: null });
     }
 }
 
